@@ -40,27 +40,23 @@ export default function RecipePage() {
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
       <Card>
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <p className="text-sm font-bold text-plum-soft">Servings</p>
-            <p className="font-display text-2xl font-bold">
-              {formatAmount(scaledServings)}
-              {scale !== 1 && <span className="ml-2 text-sm font-normal text-plum-soft">(originally {recipe.servings})</span>}
-            </p>
-          </div>
-          <div className="flex rounded-full bg-parchment p-1">
-            {SCALES.map((s) => (
-              <button
-                key={s.value}
-                onClick={() => setScale(s.value)}
-                className={`rounded-full px-4 py-2 text-sm font-bold transition-colors ${
-                  scale === s.value ? "bg-rose text-white" : "text-plum-soft"
-                }`}
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
+        <p className="text-sm font-bold text-plum-soft">Servings</p>
+        <p className="font-display text-2xl font-bold">
+          {formatAmount(scaledServings)}
+          {scale !== 1 && <span className="ml-2 text-sm font-normal text-plum-soft">(originally {recipe.servings})</span>}
+        </p>
+        <div className="mt-2 flex w-fit rounded-full bg-parchment p-1">
+          {SCALES.map((s) => (
+            <button
+              key={s.value}
+              onClick={() => setScale(s.value)}
+              className={`rounded-full px-4 py-2 text-sm font-bold transition-colors ${
+                scale === s.value ? "bg-rose text-white" : "text-plum-soft"
+              }`}
+            >
+              {s.label}
+            </button>
+          ))}
         </div>
         {scale !== 1 && (
           <p className="mt-2 text-xs text-plum-soft">

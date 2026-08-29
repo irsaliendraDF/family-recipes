@@ -41,15 +41,30 @@ export default function MealPlanPage() {
     });
   }
 
+  /** One batch fills the days it can feed: 12 muffins for 2 covers about 6 breakfasts in a row. */
   function place(recipeId: string, day: string, slot: string) {
     if (!plan) return;
-    upsertPlan({ ...plan, items: [...plan.items, { recipeId, scale: 1, day, slot }], updatedAt: new Date().toISOString() });
+    const recipe = data.recipes.find((r) => r.id === recipeId);
+    const groupId = newId();
+    const items = [{ recipeId, scale: 1 as ScaleFactor, day, slot, groupId }];
+    const meals = recipe ? Math.floor(recipe.servings / FAMILY_SIZE) : 0;
+    const start = DAYS.indexOf(day as (typeof DAYS)[number]);
+    for (let i = 1; i < meals && start + i < DAYS.length; i++) {
+      items.push({ recipeId, scale: 1 as ScaleFactor, day: DAYS[start + i], slot, groupId, carryover: true } as (typeof items)[number]);
+    }
+    upsertPlan({ ...plan, items: [...plan.items, ...items], updatedAt: new Date().toISOString() });
     setSelectedRecipeId(null);
   }
 
+  /** Removing the batch itself takes its carried-over days with it; removing a carried day removes just that day. */
   function removeItem(index: number) {
     if (!plan) return;
-    upsertPlan({ ...plan, items: plan.items.filter((_, i) => i !== index), updatedAt: new Date().toISOString() });
+    const target = plan.items[index];
+    const items =
+      target && !target.carryover && target.groupId
+        ? plan.items.filter((it, i) => i !== index && it.groupId !== target.groupId)
+        : plan.items.filter((_, i) => i !== index);
+    upsertPlan({ ...plan, items, updatedAt: new Date().toISOString() });
   }
 
   function cycleScale(index: number) {
@@ -143,17 +158,28 @@ export default function MealPlanPage() {
                       const recipe = data.recipes.find((r) => r.id === it.recipeId);
                       if (!recipe) return null;
                       return (
-                        <div key={it.index} className="mt-1 flex items-center gap-1 rounded bg-lavender-soft px-1.5 py-1">
+                        <div
+                          key={it.index}
+                          className={`mt-1 flex items-center gap-1 rounded px-1.5 py-1 ${it.carryover ? "bg-lavender-soft/40" : "bg-lavender-soft"}`}
+                        >
                           <button
-                            className="min-w-0 flex-1 truncate text-left text-xs font-bold text-plum"
-                            title={`${recipe.title}, tap to change amount. ${servingsHint(recipe.servings, it.scale)}`}
+                            className={`min-w-0 flex-1 truncate text-left text-xs font-bold ${it.carryover ? "text-plum-soft" : "text-plum"}`}
+                            title={
+                              it.carryover
+                                ? `${recipe.title}, same batch carried over`
+                                : `${recipe.title}, tap to change amount. ${servingsHint(recipe.servings, it.scale)}`
+                            }
                             onClick={(e) => {
                               e.stopPropagation();
-                              cycleScale(it.index);
+                              if (!it.carryover) cycleScale(it.index);
                             }}
                           >
                             {recipe.title}
-                            <span className="ml-1 text-lavender">{it.scale === 0.5 ? "½x" : `${it.scale}x`}</span>
+                            {it.carryover ? (
+                              <span className="ml-1 font-normal text-lavender">same batch</span>
+                            ) : (
+                              <span className="ml-1 text-lavender">{it.scale === 0.5 ? "½x" : `${it.scale}x`}</span>
+                            )}
                           </button>
                           <button
                             className="shrink-0 text-xs font-bold text-plum-soft"

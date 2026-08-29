@@ -68,6 +68,7 @@ export function buildGroceryList(plan: MealPlan, recipes: Recipe[], pantry: Pant
   const byName = new Map<string, { display: string; fraction: number; usedIn: Set<string>; uncosted: LineCost[]; item?: PantryItem }>();
 
   for (const planItem of plan.items) {
+    if (planItem.carryover) continue;
     const recipe = recipes.find((r) => r.id === planItem.recipeId);
     if (!recipe) continue;
     for (const line of recipe.ingredients) {

@@ -53,6 +53,10 @@ export interface PlanItem {
   scale: ScaleFactor;
   day?: string;
   slot?: string;
+  /** Ties a placement to the days it carries over to, so they remove together. */
+  groupId?: string;
+  /** True for the carried-over days of one batch: shown in the week, never shopped twice. */
+  carryover?: boolean;
 }
 
 export interface MealPlan {
