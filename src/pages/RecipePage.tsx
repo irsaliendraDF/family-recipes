@@ -38,7 +38,8 @@ export default function RecipePage() {
         <FlourishDivider />
       </div>
 
-      <Card className="mt-4">
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+      <Card>
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="text-sm font-bold text-plum-soft">Servings</p>
@@ -68,6 +69,24 @@ export default function RecipePage() {
         )}
       </Card>
 
+      <Card className="border-gold bg-gold-soft/30">
+        <h2 className="font-display text-xl font-bold">Approximate cost at {scale}x</h2>
+        {cost.totalCad > 0 ? (
+          <p className="mt-1 text-2xl font-bold text-gold">
+            {formatCad(cost.totalCad)}
+            {cost.excluded.length > 0 && <span className="ml-2 text-xs font-normal">and up</span>}
+          </p>
+        ) : (
+          <p className="mt-1 text-plum-soft">No priced ingredients yet. Prices live behind the pantry door on the Meal Plan page.</p>
+        )}
+        {cost.excluded.length > 0 && (
+          <p className="mt-2 text-xs text-plum-soft">
+            Not counted (no price or unmeasured): {cost.excluded.map((l) => l.line.name).join(", ")}
+          </p>
+        )}
+      </Card>
+      </div>
+
       <Card className="mt-3">
         <h2 className="font-display text-xl font-bold">Ingredients</h2>
         <ul className="mt-2 space-y-2">
@@ -83,23 +102,6 @@ export default function RecipePage() {
             </li>
           ))}
         </ul>
-      </Card>
-
-      <Card className="mt-3 border-gold bg-gold-soft/30">
-        <h2 className="font-display text-xl font-bold">Approximate cost at {scale}x</h2>
-        {cost.totalCad > 0 ? (
-          <p className="mt-1 text-2xl font-bold text-gold">
-            {formatCad(cost.totalCad)}
-            {cost.hasSamplePrices && <span className="ml-2 text-xs font-normal">(sample prices, not real)</span>}
-          </p>
-        ) : (
-          <p className="mt-1 text-plum-soft">No priced ingredients yet. Prices live in the Pantry.</p>
-        )}
-        {cost.excluded.length > 0 && (
-          <p className="mt-2 text-xs text-plum-soft">
-            Not counted (no price or unmeasured): {cost.excluded.map((l) => l.line.name).join(", ")}
-          </p>
-        )}
       </Card>
 
       <Card className="mt-3">

@@ -182,7 +182,15 @@ export const SEED: AppData = {
   ],
   pantry: [
     { id: "p-sugar", name: "granulated sugar", packageLabel: "no price yet", priceCad: null },
-    { id: "p-flour", name: "all-purpose flour", packageLabel: "no price yet", priceCad: null },
+    {
+      id: "p-flour",
+      name: "all-purpose flour",
+      packageLabel: "2.5 kg bag, Great Value",
+      priceCad: 3.97,
+      priceSource: "walmart",
+      lastChecked: "2026-08-29",
+      perPackage: { amount: 20, unit: "cups" },
+    },
     { id: "p-eggs", name: "eggs", packageLabel: "no price yet", priceCad: null },
     { id: "p-vanilla", name: "vanilla extract", packageLabel: "no price yet", priceCad: null },
     { id: "p-salt", name: "salt", packageLabel: "no price yet", priceCad: null },
