@@ -21,10 +21,31 @@ const TABLE_OF = {
   suggestions: "suggestions",
 } as const;
 
+/**
+ * Recipes Irene hands to Claude ship inside the app. A device (or database)
+ * that stored its data before those recipes existed picks them up here,
+ * without touching anything she has added or deleted since. Sample content
+ * is never resurrected this way.
+ */
+function missingSeed(data: AppData): { recipes: Recipe[]; pantry: PantryItem[] } {
+  const knownRecipes = new Set(data.recipes.map((r) => r.id));
+  const knownPantry = new Set(data.pantry.map((p) => normalizeName(p.name)));
+  return {
+    recipes: SEED.recipes.filter((r) => !r.isSample && !knownRecipes.has(r.id)),
+    pantry: SEED.pantry.filter((p) => !p.isSample && !knownPantry.has(normalizeName(p.name))),
+  };
+}
+
+function withHerRecipes(data: AppData): AppData {
+  const extra = missingSeed(data);
+  if (extra.recipes.length === 0 && extra.pantry.length === 0) return data;
+  return { ...data, recipes: [...data.recipes, ...extra.recipes], pantry: [...data.pantry, ...extra.pantry] };
+}
+
 function loadLocal(): AppData | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw) as AppData;
+    if (raw) return withHerRecipes(JSON.parse(raw) as AppData);
   } catch {
     /* storage unavailable */
   }
@@ -116,7 +137,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         remoteUpsert(TABLE_OF.suggestions, initial.suggestions);
         setData(initial);
       } else {
-        setData({ recipes, pantry, plans, suggestions } as AppData);
+        const current = { recipes, pantry, plans, suggestions } as AppData;
+        const extra = missingSeed(current);
+        remoteUpsert(TABLE_OF.recipes, extra.recipes);
+        remoteUpsert(TABLE_OF.pantry, extra.pantry);
+        setData(withHerRecipes(current));
       }
       setStatus("ready");
     }

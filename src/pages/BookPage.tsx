@@ -81,7 +81,7 @@ export default function BookPage() {
               <Badge tone="lavender">{recipe.category}</Badge>
               <span className="toc-leader" aria-hidden />
               <span className="shrink-0 text-sm font-bold text-gold">
-                {cost.totalCad > 0 ? `~${formatCad(cost.totalCad)}` : `p. ${i + 1}`}
+                {cost.totalCad > 0 && !cost.hasSamplePrices ? `~${formatCad(cost.totalCad)}` : `p. ${i + 1}`}
               </span>
             </button>
           );
