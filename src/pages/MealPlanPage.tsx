@@ -10,6 +10,16 @@ import { PantryEditor } from "../components/PantryEditor";
 const NEXT_SCALE: Record<string, ScaleFactor> = { "1": 2, "2": 0.5, "0.5": 1 };
 const CATEGORY_FILTERS = ["All", "Breakfast", "Lunch", "Dinner", "Dessert", "Snack", "Baking"];
 
+/** The household the plan feeds. */
+const FAMILY_SIZE = 2;
+
+/** "makes 12, about 6 meals for 2". Silent when a recipe's servings are per batch, not per person. */
+function servingsHint(servings: number, scale: ScaleFactor = 1): string {
+  const total = servings * scale;
+  if (total < FAMILY_SIZE) return "";
+  return `makes ${total}, about ${Math.floor(total / FAMILY_SIZE)} ${Math.floor(total / FAMILY_SIZE) === 1 ? "meal" : "meals"} for ${FAMILY_SIZE}`;
+}
+
 export default function MealPlanPage() {
   const { data, upsertPlan } = useStore();
   const [selectedRecipeId, setSelectedRecipeId] = useState<string | null>(null);
@@ -96,7 +106,10 @@ export default function MealPlanPage() {
               }`}
             >
               {r.title}
-              <span className={`block text-xs font-normal ${selectedRecipeId === r.id ? "text-blush" : "text-plum-soft"}`}>{r.category}</span>
+              <span className={`block text-xs font-normal ${selectedRecipeId === r.id ? "text-blush" : "text-plum-soft"}`}>
+                {r.category}
+                {servingsHint(r.servings) && ` · ${servingsHint(r.servings)}`}
+              </span>
             </button>
           ))}
         </div>
@@ -133,7 +146,7 @@ export default function MealPlanPage() {
                         <div key={it.index} className="mt-1 flex items-center gap-1 rounded bg-lavender-soft px-1.5 py-1">
                           <button
                             className="min-w-0 flex-1 truncate text-left text-xs font-bold text-plum"
-                            title={`${recipe.title}, tap to change amount`}
+                            title={`${recipe.title}, tap to change amount. ${servingsHint(recipe.servings, it.scale)}`}
                             onClick={(e) => {
                               e.stopPropagation();
                               cycleScale(it.index);

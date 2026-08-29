@@ -5,7 +5,7 @@ import RecipePage from "./pages/RecipePage";
 import RecipeFormPage from "./pages/RecipeFormPage";
 import MealPlanPage from "./pages/MealPlanPage";
 import SuggestionsPage from "./pages/SuggestionsPage";
-import { FlourishDivider, Tiara } from "./components/ui";
+import { Tiara } from "./components/ui";
 import { useStore } from "./data/store";
 
 const TABS = [
@@ -112,8 +112,6 @@ export default function App() {
 
         <header className="px-4 pt-6 text-center">
           <Tiara className="mx-auto h-6 w-14 text-gold" />
-          <h1 className="gold-foil font-display text-3xl font-bold tracking-wide">Family Recipes</h1>
-          <FlourishDivider />
           {cloud && (
             <button className="mt-1 text-xs font-bold text-plum-soft underline" onClick={signOut}>
               sign out
