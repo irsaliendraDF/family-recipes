@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #fdf6ee;
+  --color-parchment: #f6e8d6;
+  --color-plum: #4b2452;
+  --color-plum-soft: #7c5a88;
+  --color-rose: #d4699a;
+  --color-rose-deep: #b04a7d;
+  --color-blush: #fbdfe9;
+  --color-gold: #b08a34;
+  --color-gold-soft: #ecd9ab;
+  --color-lavender: #8e7cc3;
+  --color-lavender-soft: #ece4fa;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-script: "Great Vibes", cursive;
+  --font-body: "Nunito Sans", system-ui, sans-serif;
+}
+
+body {
+  color: var(--color-plum);
+  font-family: var(--font-body);
+  background-color: #fdf3f4;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(251, 223, 233, 0.9), transparent),
+    radial-gradient(ellipse 70% 45% at 85% 5%, rgba(236, 228, 250, 0.9), transparent),
+    radial-gradient(ellipse 90% 60% at 50% 110%, rgba(252, 238, 216, 0.8), transparent),
+    linear-gradient(170deg, #fdf3f6 0%, #f7effb 45%, #fdf6ec 100%);
+  background-attachment: fixed;
+  min-height: 100dvh;
+}
+
+input,
+select,
+textarea {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Storybook card: soft glass with a double gold frame */
+.royal-card {
+  position: relative;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(212, 175, 110, 0.55);
+  box-shadow:
+    0 4px 24px rgba(142, 124, 195, 0.14),
+    0 1px 3px rgba(176, 74, 125, 0.08);
+}
+.royal-card::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(200, 160, 80, 0.3);
+  border-radius: 0.95rem;
+  pointer-events: none;
+}
+
+/* Gold foil text with a slow shimmer */
+.gold-foil {
+  background: linear-gradient(100deg, #a87f2a 0%, #e6c56b 25%, #b08a34 50%, #f0d78a 75%, #a87f2a 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 6s linear infinite;
+}
+
+/* Script heading in a rose-to-lavender gradient */
+.script-royal {
+  font-family: var(--font-script);
+  background: linear-gradient(95deg, #b04a7d 10%, #8e7cc3 55%, #b08a34 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Twinkling sparkles scattered behind the app */
+.sparkle {
+  position: fixed;
+  pointer-events: none;
+  user-select: none;
+  animation: twinkle 3.2s ease-in-out infinite;
+  z-index: 0;
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.7) rotate(0deg);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.1) rotate(20deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gold-foil,
+  .sparkle {
+    animation: none;
+  }
+}
