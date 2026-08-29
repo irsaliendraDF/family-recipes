@@ -1,34 +1,36 @@
-import { NavLink, Route, Routes } from "react-router-dom";
+import { NavLink, Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import BookPage from "./pages/BookPage";
 import RecipePage from "./pages/RecipePage";
 import RecipeFormPage from "./pages/RecipeFormPage";
-import PantryPage from "./pages/PantryPage";
-import PlansPage from "./pages/PlansPage";
-import PlanDetailPage from "./pages/PlanDetailPage";
+import MealPlanPage from "./pages/MealPlanPage";
 import SuggestionsPage from "./pages/SuggestionsPage";
 import { Tiara } from "./components/ui";
+import { useStore } from "./data/store";
 
 const TABS = [
-  { to: "/", label: "Book", icon: "📖" },
-  { to: "/plans", label: "Meal Plans", icon: "🛒" },
-  { to: "/pantry", label: "Pantry", icon: "🧺" },
-  { to: "/smart", label: "Smart Recipes", icon: "✨" },
+  { to: "/", label: "The Book" },
+  { to: "/plan", label: "Meal Plan" },
 ];
 
 const SPARKLES = [
-  { top: "8%", left: "6%", size: "14px", color: "#d4699a", delay: "0s" },
-  { top: "14%", left: "88%", size: "12px", color: "#b08a34", delay: "0.7s" },
-  { top: "30%", left: "12%", size: "10px", color: "#8e7cc3", delay: "1.4s" },
-  { top: "38%", left: "92%", size: "15px", color: "#d4699a", delay: "2.1s" },
-  { top: "55%", left: "4%", size: "12px", color: "#b08a34", delay: "0.4s" },
-  { top: "62%", left: "85%", size: "10px", color: "#8e7cc3", delay: "1.8s" },
-  { top: "78%", left: "10%", size: "13px", color: "#d4699a", delay: "2.6s" },
-  { top: "85%", left: "90%", size: "11px", color: "#b08a34", delay: "1.1s" },
+  { top: "6%", left: "4%", size: "14px", color: "#e78bb1", delay: "0s" },
+  { top: "12%", left: "94%", size: "12px", color: "#f0d78a", delay: "0.7s" },
+  { top: "34%", left: "2%", size: "10px", color: "#b9a7e0", delay: "1.4s" },
+  { top: "42%", left: "96%", size: "15px", color: "#e78bb1", delay: "2.1s" },
+  { top: "64%", left: "3%", size: "12px", color: "#f0d78a", delay: "0.4s" },
+  { top: "72%", left: "95%", size: "10px", color: "#b9a7e0", delay: "1.8s" },
+  { top: "88%", left: "6%", size: "13px", color: "#e78bb1", delay: "2.6s" },
+  { top: "92%", left: "92%", size: "11px", color: "#f0d78a", delay: "1.1s" },
 ];
 
 export default function App() {
+  const { cloud, signOut } = useStore();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const onSmart = location.pathname === "/smart";
+
   return (
-    <div className="relative mx-auto flex min-h-dvh max-w-3xl flex-col">
+    <div className="relative mx-auto max-w-3xl px-2 pb-10 pt-4 sm:px-4">
       {SPARKLES.map((s, i) => (
         <span
           key={i}
@@ -40,55 +42,46 @@ export default function App() {
         </span>
       ))}
 
-      <header className="relative z-10 px-4 pt-5 text-center">
-        <Tiara className="mx-auto h-7 w-16 text-gold" />
-        <p className="font-script text-2xl text-lavender">Once upon a mealtime</p>
-        <h1 className="gold-foil font-display text-4xl font-bold tracking-wide">Family Recipes</h1>
-      </header>
+      <div className="relative z-10 flex items-end px-4">
+        {TABS.map((tab) => (
+          <NavLink key={tab.to} to={tab.to} end={tab.to === "/"} className={({ isActive }) => `index-tab ${isActive && !onSmart ? "active" : ""}`}>
+            {tab.label}
+          </NavLink>
+        ))}
+      </div>
 
-      <main className="relative z-10 flex-1 px-4 pb-32 pt-4">
-        <Routes>
-          <Route path="/" element={<BookPage />} />
-          <Route path="/recipe/new" element={<RecipeFormPage />} />
-          <Route path="/recipe/:id" element={<RecipePage />} />
-          <Route path="/recipe/:id/edit" element={<RecipeFormPage />} />
-          <Route path="/pantry" element={<PantryPage />} />
-          <Route path="/plans" element={<PlansPage />} />
-          <Route path="/plan/:id" element={<PlanDetailPage />} />
-          <Route path="/smart" element={<SuggestionsPage />} />
-        </Routes>
-      </main>
+      <div className="book relative z-10">
+        <button
+          className={`corner-tab ${onSmart ? "active" : ""}`}
+          onClick={() => navigate(onSmart ? "/" : "/smart")}
+          aria-label="Smart Recipes"
+          title="Smart Recipes"
+        >
+          <span aria-hidden>✨</span>
+        </button>
 
-      <nav className="fixed inset-x-0 bottom-0 z-20 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-        <div className="royal-card mx-auto flex max-w-3xl overflow-hidden !rounded-full px-1">
-          {TABS.map((tab) => (
-            <NavLink
-              key={tab.to}
-              to={tab.to}
-              end={tab.to === "/"}
-              className={({ isActive }) =>
-                `relative z-10 flex flex-1 flex-col items-center gap-0.5 rounded-full py-2.5 text-xs font-bold transition-colors ${
-                  isActive ? "text-rose-deep" : "text-plum-soft"
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <span
-                    className={`flex h-8 w-8 items-center justify-center rounded-full text-xl leading-none transition-all ${
-                      isActive ? "bg-gradient-to-br from-blush to-lavender-soft shadow-inner ring-1 ring-gold-soft" : ""
-                    }`}
-                    aria-hidden
-                  >
-                    {tab.icon}
-                  </span>
-                  {tab.label}
-                </>
-              )}
-            </NavLink>
-          ))}
-        </div>
-      </nav>
+        <header className="px-4 pt-6 text-center">
+          <Tiara className="mx-auto h-7 w-16 text-gold" />
+          <p className="font-script text-2xl text-lavender">Once upon a mealtime</p>
+          <h1 className="gold-foil font-display text-4xl font-bold tracking-wide">Family Recipes</h1>
+          {cloud && (
+            <button className="mt-1 text-xs font-bold text-plum-soft underline" onClick={signOut}>
+              sign out
+            </button>
+          )}
+        </header>
+
+        <main className="px-4 pb-10 pt-4 sm:px-8">
+          <Routes>
+            <Route path="/" element={<BookPage />} />
+            <Route path="/recipe/new" element={<RecipeFormPage />} />
+            <Route path="/recipe/:id" element={<RecipePage />} />
+            <Route path="/recipe/:id/edit" element={<RecipeFormPage />} />
+            <Route path="/plan" element={<MealPlanPage />} />
+            <Route path="/smart" element={<SuggestionsPage />} />
+          </Routes>
+        </main>
+      </div>
     </div>
   );
 }

@@ -32,7 +32,8 @@ A Disney princess inspired recipe book app holding Irene's "Family Recipes": rec
 ## Source of truth (her build process requires naming this before building)
 
 - **Supabase owns all the data**: recipes, ingredients, prices, meal plans, smart recipe suggestions. The app reads and writes Supabase. Nothing lives only in the app's code.
-- Sign-in is a magic link to her email. Only her email can read or write. No passwords stored, no public access to the data.
+- **Her decision, 2026-08-29: the Supabase account is a new one under her and Joel's joint email**, not the DigitalFlow org (a second project there costs $10 USD/month). Sign-in is email and password she creates herself; sign-ups get closed after the family is in. Details in `PHASE-5-SPEC.md` and `SETUP-SUPABASE.md`.
+- Until keys arrive the app runs in practice mode, fully working, data per device, auto-imported on first cloud sign-in.
 
 ## Stack
 

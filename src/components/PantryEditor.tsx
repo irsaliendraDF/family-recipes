@@ -1,85 +1,9 @@
 import { useState } from "react";
 import type { PantryItem } from "../types";
-import { useStore } from "../data/store";
-import { normalizeName, KITCHEN_UNITS } from "../lib/units";
-import { formatCad } from "../lib/fractions";
-import { Badge, Card, PageHeading, PriceProvenance, buttonPrimary, buttonSecondary, inputClass } from "../components/ui";
+import { KITCHEN_UNITS } from "../lib/units";
+import { Card, buttonPrimary, buttonSecondary, inputClass } from "./ui";
 
-export default function PantryPage() {
-  const { data, upsertPantryItem, deletePantryItem } = useStore();
-  const [editingId, setEditingId] = useState<string | null>(null);
-
-  const usedIn = (item: PantryItem) =>
-    data.recipes.filter((r) => r.ingredients.some((i) => normalizeName(i.name) === normalizeName(item.name)));
-
-  const sorted = [...data.pantry].sort((a, b) => {
-    const aNeeds = a.priceCad === null ? 0 : 1;
-    const bNeeds = b.priceCad === null ? 0 : 1;
-    if (aNeeds !== bNeeds) return aNeeds - bNeeds;
-    return (a.lastChecked ?? "") < (b.lastChecked ?? "") ? -1 : 1;
-  });
-
-  const needCount = data.pantry.filter((p) => p.priceCad === null).length;
-
-  return (
-    <div>
-      <PageHeading sub="Every ingredient, its Walmart price, and how fresh that price is">The Pantry</PageHeading>
-
-      {needCount > 0 && (
-        <Card className="mb-4 border-rose bg-blush/50 text-center text-sm">
-          <strong>{needCount}</strong> {needCount === 1 ? "ingredient needs" : "ingredients need"} a price. Ask Claude to look
-          them up on walmart.ca, or tap one to enter it yourself.
-        </Card>
-      )}
-
-      <div className="space-y-3">
-        {sorted.map((item) =>
-          editingId === item.id ? (
-            <PantryEditor
-              key={item.id}
-              item={item}
-              onSave={(updated) => {
-                upsertPantryItem(updated);
-                setEditingId(null);
-              }}
-              onDelete={() => {
-                deletePantryItem(item.id);
-                setEditingId(null);
-              }}
-              onCancel={() => setEditingId(null)}
-            />
-          ) : (
-            <Card key={item.id} className="cursor-pointer" >
-              <button className="w-full text-left" onClick={() => setEditingId(item.id)}>
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <p className="font-display text-lg font-bold capitalize">{item.name}</p>
-                    <p className="text-sm text-plum-soft">{item.packageLabel}</p>
-                  </div>
-                  <div className="text-right">
-                    {item.priceCad !== null ? (
-                      <p className="text-lg font-bold text-gold">{formatCad(item.priceCad)}</p>
-                    ) : (
-                      <Badge tone="rose">price needed</Badge>
-                    )}
-                  </div>
-                </div>
-                <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
-                  <PriceProvenance item={item} />
-                  <span className="text-xs text-plum-soft">
-                    {usedIn(item).length} {usedIn(item).length === 1 ? "recipe" : "recipes"}
-                  </span>
-                </div>
-              </button>
-            </Card>
-          ),
-        )}
-      </div>
-    </div>
-  );
-}
-
-function PantryEditor({
+export function PantryEditor({
   item,
   onSave,
   onDelete,
@@ -96,7 +20,7 @@ function PantryEditor({
   const [perUnit, setPerUnit] = useState(item.perPackage?.unit ?? "cups");
 
   return (
-    <Card className="border-lavender">
+    <Card className="border-lavender p-4">
       <p className="font-display text-lg font-bold capitalize">{item.name}</p>
       <div className="mt-3 space-y-3">
         <label className="block">

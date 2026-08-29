@@ -45,10 +45,14 @@ export interface PantryItem {
   isSample?: boolean;
 }
 
+export const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] as const;
+export const SLOTS = ["Breakfast", "Lunch", "Dinner", "Snack"] as const;
+
 export interface PlanItem {
   recipeId: string;
   scale: ScaleFactor;
   day?: string;
+  slot?: string;
 }
 
 export interface MealPlan {

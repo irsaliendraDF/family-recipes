@@ -28,7 +28,7 @@ export default function RecipePage() {
     <div>
       <div className="text-center">
         <h1 className="script-royal text-5xl leading-tight">{recipe.title}</h1>
-        {recipe.story && <p className="mx-auto mt-2 max-w-md font-display text-lg italic text-plum-soft">{recipe.story}</p>}
+        {recipe.story && <p className="drop-cap mx-auto mt-2 max-w-md text-left font-display text-lg italic text-plum-soft">{recipe.story}</p>}
         <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-sm text-plum-soft">
           <Badge tone="lavender">{recipe.category}</Badge>
           {recipe.prepMin != null && <span>prep {recipe.prepMin} min</span>}
