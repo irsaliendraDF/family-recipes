@@ -1,14 +1,16 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "../data/store";
 import { costRecipe } from "../lib/cost";
 import { formatCad } from "../lib/fractions";
-import { Badge, Card, PageHeading, buttonPrimary } from "../components/ui";
+import { Badge, buttonPrimary, Card } from "../components/ui";
 
 export default function BookPage() {
   const { data } = useStore();
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string | null>(null);
+  const [turning, setTurning] = useState(false);
 
   const categories = useMemo(() => [...new Set(data.recipes.map((r) => r.category))].sort(), [data.recipes]);
 
@@ -19,9 +21,23 @@ export default function BookPage() {
     return matchesSearch && (!category || r.category === category);
   });
 
+  /** Turn the page, then land on the recipe. */
+  function openRecipe(id: string) {
+    if (turning) return;
+    setTurning(true);
+    setTimeout(() => navigate(`/recipe/${id}`), 620);
+  }
+
   return (
     <div>
-      <PageHeading sub="Tried, tested, and loved by the family">The Recipe Book</PageHeading>
+      {turning && (
+        <div className="page-turn" aria-hidden>
+          <div className="turning-sheet" />
+        </div>
+      )}
+
+      <h2 className="text-center font-display text-2xl font-bold tracking-wide">Table of Contents</h2>
+      <p className="mb-4 text-center font-display text-sm italic text-plum-soft">Tried, tested, and loved by the family</p>
 
       <div className="mb-4 flex flex-col gap-3">
         <input
@@ -51,33 +67,23 @@ export default function BookPage() {
         )}
       </div>
 
-      {shown.length === 0 && (
-        <Card className="text-center text-plum-soft">No recipes here yet. Add the first one below.</Card>
-      )}
+      {shown.length === 0 && <Card className="p-4 text-center text-plum-soft">No recipes here yet. Add the first one below.</Card>}
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        {shown.map((recipe) => {
+      <div>
+        {shown.map((recipe, i) => {
           const cost = costRecipe(recipe, data.pantry, 1);
-          const totalMin = (recipe.prepMin ?? 0) + (recipe.cookMin ?? 0);
           return (
-            <Link key={recipe.id} to={`/recipe/${recipe.id}`}>
-              <Card className="h-full transition-shadow hover:shadow-md">
-                <div className="flex items-start justify-between gap-2">
-                  <h2 className="font-display text-xl font-bold leading-snug">{recipe.title}</h2>
-                  {recipe.isSample && <Badge tone="plain">sample</Badge>}
-                </div>
-                <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-plum-soft">
-                  <Badge tone="lavender">{recipe.category}</Badge>
-                  <span>serves {recipe.servings}</span>
-                  {totalMin > 0 && <span>{totalMin} min</span>}
-                </div>
-                <p className="mt-2 text-sm font-bold text-gold">
-                  {cost.totalCad > 0
-                    ? `approx ${formatCad(cost.totalCad)}${cost.excluded.length ? " and up" : ""}${cost.hasSamplePrices ? " (sample prices)" : ""}`
-                    : "cost once prices are in"}
-                </p>
-              </Card>
-            </Link>
+            <button key={recipe.id} className="toc-entry group" onClick={() => openRecipe(recipe.id)}>
+              <span className="font-display text-lg font-bold leading-snug text-plum group-hover:text-rose-deep">
+                {recipe.title}
+              </span>
+              {recipe.isSample && <Badge tone="plain">sample</Badge>}
+              <Badge tone="lavender">{recipe.category}</Badge>
+              <span className="toc-leader" aria-hidden />
+              <span className="shrink-0 text-sm font-bold text-gold">
+                {cost.totalCad > 0 ? `~${formatCad(cost.totalCad)}` : `p. ${i + 1}`}
+              </span>
+            </button>
           );
         })}
       </div>

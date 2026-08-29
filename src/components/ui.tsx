@@ -3,10 +3,9 @@ import type { PantryItem } from "../types";
 
 export function PageHeading({ children, sub }: { children: ReactNode; sub?: string }) {
   return (
-    <div className="mb-6 text-center">
-      <h1 className="script-royal text-5xl leading-tight sm:text-6xl">{children}</h1>
-      {sub && <p className="mt-1 font-display text-base italic text-plum-soft">{sub}</p>}
-      <FlourishDivider />
+    <div className="mb-5 text-center">
+      <h1 className="script-royal text-4xl leading-tight sm:text-5xl">{children}</h1>
+      {sub && <p className="mt-1 font-display text-sm italic text-plum-soft">{sub}</p>}
     </div>
   );
 }
