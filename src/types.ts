@@ -28,7 +28,7 @@ export interface Recipe {
   updatedAt: string;
 }
 
-export type PriceSource = "walmart" | "irene" | "sample";
+export type PriceSource = "walmart" | "flyer" | "irene" | "sample";
 
 export interface PantryItem {
   id: string;

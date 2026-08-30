@@ -21,25 +21,54 @@ const TABLE_OF = {
   suggestions: "suggestions",
 } as const;
 
+/** Timestamps that mark a stored seed recipe as never touched by Irene in the app. */
+const PRISTINE_SEED_STAMPS = new Set(["2026-08-29T00:00:00.000Z"]);
+
 /**
  * Recipes Irene hands to Claude ship inside the app. A device (or database)
  * that stored its data before those recipes existed picks them up here,
- * without touching anything she has added or deleted since. Sample content
- * is never resurrected this way.
+ * without touching anything she has added or deleted since. A stored seed
+ * recipe she has never edited (its timestamp is still the original seed
+ * stamp) refreshes when the seed carries a newer revision; one she has
+ * edited is hers and stays exactly as she left it. Sample content is never
+ * resurrected this way.
  */
-function missingSeed(data: AppData): { recipes: Recipe[]; pantry: PantryItem[] } {
+function missingSeed(data: AppData): { recipes: Recipe[]; pantry: PantryItem[]; refreshed: Recipe[]; pricedPantry: PantryItem[] } {
   const knownRecipes = new Set(data.recipes.map((r) => r.id));
   const knownPantry = new Set(data.pantry.map((p) => normalizeName(p.name)));
   return {
     recipes: SEED.recipes.filter((r) => !r.isSample && !knownRecipes.has(r.id)),
     pantry: SEED.pantry.filter((p) => !p.isSample && !knownPantry.has(normalizeName(p.name))),
+    refreshed: SEED.recipes.filter((r) => {
+      const stored = data.recipes.find((x) => x.id === r.id);
+      return stored && PRISTINE_SEED_STAMPS.has(stored.updatedAt) && stored.updatedAt !== r.updatedAt;
+    }),
+    // A stored item still waiting for a price fills in when the seed has one; a price she set herself is never touched.
+    pricedPantry: SEED.pantry.filter((p) => {
+      if (p.priceCad === null) return false;
+      const stored = data.pantry.find((x) => normalizeName(x.name) === normalizeName(p.name));
+      return !!stored && stored.priceCad === null;
+    }),
   };
 }
 
 function withHerRecipes(data: AppData): AppData {
   const extra = missingSeed(data);
-  if (extra.recipes.length === 0 && extra.pantry.length === 0) return data;
-  return { ...data, recipes: [...data.recipes, ...extra.recipes], pantry: [...data.pantry, ...extra.pantry] };
+  if (extra.recipes.length === 0 && extra.pantry.length === 0 && extra.refreshed.length === 0 && extra.pricedPantry.length === 0)
+    return data;
+  const refreshedById = new Map(extra.refreshed.map((r) => [r.id, r]));
+  const pricedByName = new Map(extra.pricedPantry.map((p) => [normalizeName(p.name), p]));
+  return {
+    ...data,
+    recipes: [...data.recipes.map((r) => refreshedById.get(r.id) ?? r), ...extra.recipes],
+    pantry: [
+      ...data.pantry.map((p) => {
+        const priced = pricedByName.get(normalizeName(p.name));
+        return priced ? { ...priced, id: p.id } : p;
+      }),
+      ...extra.pantry,
+    ],
+  };
 }
 
 function loadLocal(): AppData | null {
@@ -139,9 +168,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       } else {
         const current = { recipes, pantry, plans, suggestions } as AppData;
         const extra = missingSeed(current);
-        remoteUpsert(TABLE_OF.recipes, extra.recipes);
-        remoteUpsert(TABLE_OF.pantry, extra.pantry);
-        setData(withHerRecipes(current));
+        const merged = withHerRecipes(current);
+        remoteUpsert(TABLE_OF.recipes, [...extra.recipes, ...extra.refreshed]);
+        const pricedNames = new Set(extra.pricedPantry.map((p) => normalizeName(p.name)));
+        remoteUpsert(TABLE_OF.pantry, [...extra.pantry, ...merged.pantry.filter((p) => pricedNames.has(normalizeName(p.name)))]);
+        setData(merged);
       }
       setStatus("ready");
     }

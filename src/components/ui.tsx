@@ -56,7 +56,7 @@ export function Badge({ children, tone = "lavender" }: { children: ReactNode; to
 export function PriceProvenance({ item }: { item: PantryItem }) {
   if (item.priceCad === null) return <Badge tone="rose">price needed</Badge>;
   if (item.priceSource === "sample") return <Badge tone="plain">sample price, not real</Badge>;
-  const label = item.priceSource === "irene" ? "entered by you" : "walmart.ca";
+  const label = item.priceSource === "irene" ? "entered by you" : item.priceSource === "flyer" ? "from a flyer" : "walmart.ca";
   return (
     <span className="text-xs text-plum-soft">
       {label}
