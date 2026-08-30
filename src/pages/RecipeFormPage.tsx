@@ -98,7 +98,7 @@ export default function RecipeFormPage() {
             <span className="text-sm font-bold text-plum-soft">Category</span>
             <input className={inputClass} value={category} onChange={(e) => setCategory(e.target.value)} list="categories" />
             <datalist id="categories">
-              {["Breakfast", "Lunch", "Dinner", "Dessert", "Snack", "Baking"].map((c) => (
+              {["Breakfast", "Lunch", "Dinner", "Side", "Dessert", "Snack", "Baking"].map((c) => (
                 <option key={c} value={c} />
               ))}
             </datalist>

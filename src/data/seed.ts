@@ -440,6 +440,30 @@ export const SEED: AppData = {
       createdAt: REV3,
       updatedAt: REV3,
     },
+    {
+      id: "irene-mashed-potatoes",
+      title: "Simple Mashed Potatoes",
+      story: "The famous simple ones. Written down from a spoken description, so worth a read back. How many it feeds is not recorded yet.",
+      category: "Side",
+      servings: 1,
+      cookMin: 13,
+      tags: [],
+      ingredients: [
+        { id: "mp1", name: "yellow potatoes", amount: 6, unit: "", note: "peeled and cubed" },
+        { id: "mp2", name: "salt", amount: null, unit: "", note: "her words: table salt, a lot, until the water is salty like the sea" },
+        { id: "mp3", name: "water", amount: null, unit: "", note: "enough to cover, started cool" },
+        { id: "mp4", name: "butter", amount: 0.25, unit: "cups", note: "half a stick" },
+      ],
+      steps: [
+        "Fill a large pot with cool water and salt it heavily, until it is salty like the sea.",
+        "Peel and cube the potatoes and put them into the cool water, so it all comes to the boil together.",
+        "Boil for 13 minutes.",
+        "Drain, and rinse the extra scum off.",
+        "Stir in the butter, and any spices you like. That is it.",
+      ],
+      createdAt: REV3,
+      updatedAt: REV3,
+    },
   ],
   pantry: [
     {

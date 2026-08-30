@@ -8,7 +8,7 @@ import { Badge, Card, PageHeading, PriceProvenance, buttonPrimary, buttonSeconda
 import { PantryEditor } from "../components/PantryEditor";
 
 const NEXT_SCALE: Record<string, ScaleFactor> = { "1": 2, "2": 0.5, "0.5": 1 };
-const CATEGORY_FILTERS = ["All", "Breakfast", "Lunch", "Dinner", "Dessert", "Snack", "Baking"];
+const CATEGORY_FILTERS = ["All", "Breakfast", "Lunch", "Dinner", "Side", "Dessert", "Snack", "Baking"];
 
 /** The household the plan feeds. */
 const FAMILY_SIZE = 2;
