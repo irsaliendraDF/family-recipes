@@ -1,4 +1,4 @@
-import type { AppData } from "../types";
+import type { AppData, PantryItem } from "../types";
 
 const NOW = "2026-08-29T00:00:00.000Z";
 /** Stamp for seed entries revised 2026-08-30; lets pristine stored copies refresh. */
@@ -7,6 +7,25 @@ const REV1 = "2026-08-30T00:00:00.000Z";
 const REV2 = "2026-08-30T12:00:00.000Z";
 /** Third: the egg roll servings and times she gave after the recipe first shipped. */
 const REV3 = "2026-08-30T18:00:00.000Z";
+/** Fourth: the caldereta and mashed potato amounts, servings and times. */
+const REV4 = "2026-08-30T22:00:00.000Z";
+
+/**
+ * Every stamp the seed has ever used. A stored recipe carrying one of these has not
+ * been edited in the app, so it is safe to refresh from the seed. Listed here rather
+ * than copied into the store, because copying it is how a revision gets forgotten.
+ */
+export const SEED_STAMPS = [NOW, REV1, REV2, REV3, REV4];
+
+/**
+ * Stamps every pantry item that ships with the app. A stored item still carrying one
+ * of these stamps has never been edited in the pantry, so a corrected price, package
+ * size or label can safely replace it. Anything saved by hand gets the moment it was
+ * saved instead, and is then left alone forever.
+ */
+function stampPantry(items: PantryItem[]): PantryItem[] {
+  return items.map((item) => ({ ...item, updatedAt: REV4 }));
+}
 
 /**
  * One sample recipe so every screen can be tested before Irene's real
@@ -404,29 +423,29 @@ export const SEED: AppData = {
     {
       id: "irene-caldereta",
       title: "Filipino Caldereta",
-      story: "Written down from a spoken description, so worth a read back. How many it feeds is not recorded yet. Where the amount was a range, the top of the range is used, so the cost is not understated.",
+      story: "Feeds 2 people 3 times. Where the amount was a range, the top of the range is used, so the cost is not understated.",
       category: "Dinner",
-      servings: 1,
+      servings: 6,
+      prepMin: 30,
       cookMin: 70,
       tags: [],
       ingredients: [
-        { id: "k1", name: "beef roast", amount: 1, unit: "", note: "a large one, sometimes sirloin tip, cut into cubes a little under an inch" },
+        { id: "k1", name: "beef roast", amount: 3, unit: "lb", note: "sometimes sirloin tip, cut into cubes a little under an inch" },
         { id: "k2", name: "soy sauce", amount: 0.5, unit: "cups", note: "for the marinade" },
         { id: "k3", name: "oyster sauce", amount: 0.25, unit: "cups", note: "for the marinade" },
         { id: "k4", name: "yellow onion", amount: 1, unit: "", note: "her words: a small onion, cut into strings, into the marinade" },
-        { id: "k5", name: "black pepper", amount: null, unit: "", note: "crushed, into the marinade; amount not recorded" },
+        { id: "k5", name: "black pepper", amount: 1, unit: "tbsp", note: "crushed, into the marinade" },
         { id: "k6", name: "olive oil", amount: null, unit: "", note: "a little, to warm the wok" },
         { id: "k7", name: "tomato paste", amount: 1, unit: "", note: "one can, size not recorded" },
-        { id: "k8", name: "basil leaves", amount: null, unit: "", note: "amount not recorded, and dried or fresh not recorded" },
-        { id: "k9", name: "dried oregano", amount: null, unit: "", note: "amount not recorded" },
-        { id: "k10", name: "chili powder", amount: null, unit: "", note: "goes in with the tomato paste; amount not recorded" },
+        { id: "k8", name: "basil leaves", amount: 4, unit: "", note: "dried; her words: 3 to 4 leaves" },
+        { id: "k9", name: "dried oregano", amount: 0.5, unit: "tbsp" },
+        { id: "k10", name: "chili powder", amount: 1, unit: "tsp", note: "goes in with the tomato paste" },
         { id: "k11", name: "yellow potatoes", amount: 4, unit: "", note: "her words: 3 to 4, cubed; yellow are best" },
         { id: "k12", name: "carrots", amount: 3, unit: "", note: "her words: 2 to 3, small" },
         { id: "k13", name: "spicy pickles", amount: 4, unit: "", note: "her words: 3 to 4" },
         { id: "k14", name: "olives", amount: 8, unit: "", note: "her words: 6 to 8" },
         { id: "k15", name: "jalapeno peppers", amount: null, unit: "", note: "sometimes, for extra spice" },
         { id: "k16", name: "pickle juice", amount: 1, unit: "tbsp" },
-        { id: "k17", name: "rice", amount: null, unit: "", note: "to serve; amount not recorded" },
       ],
       steps: [
         "Cut the beef roast into cubes a little under an inch.",
@@ -435,17 +454,18 @@ export const SEED: AppData = {
         "Add the tomato paste, basil, oregano and chili powder. Mix the paste through and let it come together for a few minutes, until it is a consistent red paste.",
         "Add the cubed potatoes, the carrots, the spicy pickles, the olives, the jalapenos if using, and the pickle juice.",
         "Lid on, and cook it down for an hour, or until the meat is really tender, the juices have reduced and soaked in, and the potatoes and carrots are soft.",
-        "Serve on a bed of rice.",
+        "Serve on a bed of rice, which is a side of its own rather than part of the pot.",
       ],
       createdAt: REV3,
-      updatedAt: REV3,
+      updatedAt: REV4,
     },
     {
       id: "irene-mashed-potatoes",
       title: "Simple Mashed Potatoes",
-      story: "The famous simple ones. Written down from a spoken description, so worth a read back. How many it feeds is not recorded yet.",
+      story: "The famous simple ones. Feeds 2 people 3 times.",
       category: "Side",
-      servings: 1,
+      servings: 6,
+      prepMin: 15,
       cookMin: 13,
       tags: [],
       ingredients: [
@@ -462,10 +482,10 @@ export const SEED: AppData = {
         "Stir in the butter, and any spices you like. That is it.",
       ],
       createdAt: REV3,
-      updatedAt: REV3,
+      updatedAt: REV4,
     },
   ],
-  pantry: [
+  pantry: stampPantry([
     {
       id: "p-sugar",
       name: "granulated sugar",
@@ -935,18 +955,20 @@ export const SEED: AppData = {
     { id: "p-rice-vinegar", name: "rice vinegar", packageLabel: "no price yet", priceCad: null },
     { id: "p-oyster-sauce", name: "oyster sauce", packageLabel: "no price yet", priceCad: null },
     {
-      // Her words: a large beef roast from Gateway Meat Market, $17 to $19. Priced at the
-      // top of her range so the cost is not understated; the weight is not recorded.
+      // Her second, more accurate figure: about $9 a pound at Gateway Meat Market, and
+      // she buys about a 3 lb roast. Priced by the pound so any roast size costs out.
+      // Note this does not reconcile with her first figure of $17 to $19 for a roast,
+      // which at $9 a pound would be closer to 2 lb.
       id: "p-beef-roast",
       name: "beef roast",
-      packageLabel: "one large roast, sometimes sirloin tip, Gateway Meat Market, her range $17 to $19",
-      priceCad: 19,
+      packageLabel: "beef roast, sometimes sirloin tip, Gateway Meat Market, about $9 a pound",
+      priceCad: 9,
       priceSource: "irene",
       lastChecked: "2026-08-30",
-      perPackage: { amount: 1, unit: "" },
+      perPackage: { amount: 1, unit: "lb" },
     },
     { id: "p-tomato-paste", name: "tomato paste", packageLabel: "no price yet", priceCad: null },
-    { id: "p-basil-leaves", name: "basil leaves", packageLabel: "no price yet", priceCad: null },
+    { id: "p-basil-leaves", name: "basil leaves", packageLabel: "no price yet, and they are the dried ones", priceCad: null },
     { id: "p-yellow-potatoes", name: "yellow potatoes", packageLabel: "no price yet", priceCad: null },
     { id: "p-carrots", name: "carrots", packageLabel: "no price yet", priceCad: null },
     { id: "p-spicy-pickles", name: "spicy pickles", packageLabel: "no price yet", priceCad: null },
@@ -962,7 +984,7 @@ export const SEED: AppData = {
       perPackage: { amount: 100, unit: "tbsp" },
     },
     { id: "p-rice", name: "rice", packageLabel: "no price yet", priceCad: null },
-  ],
+  ]),
   plans: [],
   suggestions: [],
 };

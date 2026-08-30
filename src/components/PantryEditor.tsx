@@ -64,6 +64,8 @@ export function PantryEditor({
               lastChecked: priceNum !== null ? new Date().toISOString().slice(0, 10) : item.lastChecked,
               perPackage:
                 perAmount.trim() !== "" && Number(perAmount) > 0 ? { amount: Number(perAmount), unit: perUnit } : item.perPackage,
+              // Stamping the save is what stops a later seed correction overwriting it.
+              updatedAt: new Date().toISOString(),
             });
           }}
         >

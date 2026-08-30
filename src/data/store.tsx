@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { AppData, MealPlan, PantryItem, Recipe, Suggestion } from "../types";
-import { SEED } from "./seed";
+import { SEED, SEED_STAMPS } from "./seed";
 import { normalizeName } from "../lib/units";
 import { supabase } from "../lib/supabase";
 import { SignIn } from "../components/SignIn";
@@ -22,7 +22,7 @@ const TABLE_OF = {
 } as const;
 
 /** Timestamps that mark a stored seed recipe as never touched by Irene in the app. */
-const PRISTINE_SEED_STAMPS = new Set(["2026-08-29T00:00:00.000Z", "2026-08-30T00:00:00.000Z", "2026-08-30T12:00:00.000Z"]);
+const PRISTINE_SEED_STAMPS = new Set(SEED_STAMPS);
 
 /**
  * Recipes Irene hands to Claude ship inside the app. A device (or database)
@@ -34,17 +34,17 @@ const PRISTINE_SEED_STAMPS = new Set(["2026-08-29T00:00:00.000Z", "2026-08-30T00
  * resurrected this way.
  */
 /**
- * True when a stored pantry item still looks exactly as the seed shipped it: same
- * price, same source, same check date. Anything she saved in the pantry editor comes
- * back marked "irene" and dated today, so this is a safe test for "she never touched
- * it" and lets a corrected package size or label reach her device.
+ * True when a stored pantry item has never been saved by hand. Seed items carry a
+ * revision stamp; the pantry editor replaces it with the moment of saving. Items
+ * stored before stamping existed carry none, and those all came from the seed too.
  */
-function untouchedBySeed(stored: PantryItem, seed: PantryItem): boolean {
-  return stored.priceCad === seed.priceCad && stored.priceSource === seed.priceSource && stored.lastChecked === seed.lastChecked;
+function untouchedBySeed(stored: PantryItem): boolean {
+  return stored.updatedAt === undefined || PRISTINE_SEED_STAMPS.has(stored.updatedAt);
 }
 
 function differsFromSeed(stored: PantryItem, seed: PantryItem): boolean {
   return (
+    stored.priceCad !== seed.priceCad ||
     stored.packageLabel !== seed.packageLabel ||
     stored.perPackage?.amount !== seed.perPackage?.amount ||
     stored.perPackage?.unit !== seed.perPackage?.unit
@@ -68,7 +68,7 @@ function missingSeed(data: AppData): { recipes: Recipe[]; pantry: PantryItem[]; 
       const stored = data.pantry.find((x) => normalizeName(x.name) === normalizeName(p.name));
       if (!stored) return false;
       if (p.priceCad !== null && stored.priceCad === null) return true;
-      return untouchedBySeed(stored, p) && differsFromSeed(stored, p);
+      return untouchedBySeed(stored) && differsFromSeed(stored, p);
     }),
   };
 }

@@ -42,6 +42,12 @@ export interface PantryItem {
   lastChecked?: string;
   /** How much recipe-measurable content one package holds, e.g. 17 cups. */
   perPackage?: { amount: number; unit: string };
+  /**
+   * Set to a seed revision stamp for items that shipped with the app, and to the
+   * moment of saving for anything edited in the pantry. That is how a correction can
+   * reach a device without ever overwriting a price entered by hand.
+   */
+  updatedAt?: string;
   isSample?: boolean;
 }
 
