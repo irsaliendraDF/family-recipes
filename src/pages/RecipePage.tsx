@@ -6,6 +6,17 @@ import { costRecipe } from "../lib/cost";
 import { formatAmount, formatCad, formatQuantity } from "../lib/fractions";
 import { Badge, Card, FlourishDivider, buttonSecondary } from "../components/ui";
 
+/**
+ * Why a line is left out of the total. Kept apart on purpose: an ingredient with a
+ * price but no amount written down is a different problem from one with no price,
+ * and lumping them together read as "still needs a price" when it did not.
+ */
+const EXCLUSION_LABELS = [
+  { reasons: ["price needed", "no pantry item"], label: "Left out, still needs a price" },
+  { reasons: ["unmeasured"], label: "Left out, no amount written down" },
+  { reasons: ["units not convertible"], label: "Left out, the recipe unit does not match the package" },
+];
+
 const SCALES: { value: ScaleFactor; label: string }[] = [
   { value: 0.5, label: "½x" },
   { value: 1, label: "1x" },
@@ -76,9 +87,16 @@ export default function RecipePage() {
           <p className="mt-1 text-plum-soft">No priced ingredients yet. Prices live behind the pantry door on the Meal Plan page.</p>
         )}
         {cost.excluded.length > 0 && (
-          <p className="mt-2 text-xs text-plum-soft">
-            Not counted (no price or unmeasured): {cost.excluded.map((l) => l.line.name).join(", ")}
-          </p>
+          <div className="mt-2 space-y-1 text-xs text-plum-soft">
+            {EXCLUSION_LABELS.map(({ reasons, label }) => {
+              const names = cost.excluded.filter((l) => reasons.includes(l.reason ?? "")).map((l) => l.line.name);
+              return names.length === 0 ? null : (
+                <p key={label}>
+                  {label}: {names.join(", ")}
+                </p>
+              );
+            })}
+          </div>
         )}
       </Card>
       </div>

@@ -33,6 +33,24 @@ const PRISTINE_SEED_STAMPS = new Set(["2026-08-29T00:00:00.000Z", "2026-08-30T00
  * edited is hers and stays exactly as she left it. Sample content is never
  * resurrected this way.
  */
+/**
+ * True when a stored pantry item still looks exactly as the seed shipped it: same
+ * price, same source, same check date. Anything she saved in the pantry editor comes
+ * back marked "irene" and dated today, so this is a safe test for "she never touched
+ * it" and lets a corrected package size or label reach her device.
+ */
+function untouchedBySeed(stored: PantryItem, seed: PantryItem): boolean {
+  return stored.priceCad === seed.priceCad && stored.priceSource === seed.priceSource && stored.lastChecked === seed.lastChecked;
+}
+
+function differsFromSeed(stored: PantryItem, seed: PantryItem): boolean {
+  return (
+    stored.packageLabel !== seed.packageLabel ||
+    stored.perPackage?.amount !== seed.perPackage?.amount ||
+    stored.perPackage?.unit !== seed.perPackage?.unit
+  );
+}
+
 function missingSeed(data: AppData): { recipes: Recipe[]; pantry: PantryItem[]; refreshed: Recipe[]; pricedPantry: PantryItem[] } {
   const knownRecipes = new Set(data.recipes.map((r) => r.id));
   const knownPantry = new Set(data.pantry.map((p) => normalizeName(p.name)));
@@ -43,11 +61,14 @@ function missingSeed(data: AppData): { recipes: Recipe[]; pantry: PantryItem[]; 
       const stored = data.recipes.find((x) => x.id === r.id);
       return stored && PRISTINE_SEED_STAMPS.has(stored.updatedAt) && stored.updatedAt !== r.updatedAt;
     }),
-    // A stored item still waiting for a price fills in when the seed has one; a price she set herself is never touched.
+    // A stored item still waiting for a price fills in when the seed has one, and one
+    // she has never edited picks up a corrected package size or label. A price she set
+    // herself is never touched.
     pricedPantry: SEED.pantry.filter((p) => {
-      if (p.priceCad === null) return false;
       const stored = data.pantry.find((x) => normalizeName(x.name) === normalizeName(p.name));
-      return !!stored && stored.priceCad === null;
+      if (!stored) return false;
+      if (p.priceCad !== null && stored.priceCad === null) return true;
+      return untouchedBySeed(stored, p) && differsFromSeed(stored, p);
     }),
   };
 }

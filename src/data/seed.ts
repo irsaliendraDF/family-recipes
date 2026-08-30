@@ -645,10 +645,12 @@ export const SEED: AppData = {
       perPackage: { amount: 200, unit: "tsp" },
     },
     {
-      // 85 g of peppercorns at roughly 2.3 g per tsp ground, so about 37 tsp.
+      // 85 g of peppercorns at roughly 2.3 g per tsp ground, so about 37 tsp. She buys
+      // whole peppercorns and grinds them, so this one item is the black pepper in
+      // every recipe; there is no separate ground pepper to price.
       id: "p-black-pepper",
       name: "black pepper",
-      packageLabel: "85 g bag, Great Value Whole Black Peppercorns",
+      packageLabel: "85 g bag, Great Value Whole Black Peppercorns, ground in your own grinder",
       priceCad: 2.27,
       priceSource: "walmart",
       lastChecked: "2026-08-30",
