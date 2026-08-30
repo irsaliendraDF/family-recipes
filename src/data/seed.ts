@@ -477,7 +477,16 @@ export const SEED: AppData = {
       lastChecked: "2026-08-30",
       perPackage: { amount: 4, unit: "cups" },
     },
-    { id: "p-powdered-sugar", name: "powdered sugar", packageLabel: "no price yet", priceCad: null },
+    {
+      // 1 kg of icing sugar at roughly 125 g per cup, so about 8 cups.
+      id: "p-powdered-sugar",
+      name: "powdered sugar",
+      packageLabel: "1 kg bag, Redpath Icing Sugar",
+      priceCad: 3.77,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 8, unit: "cups" },
+    },
     {
       id: "p-bananas",
       name: "bananas",
@@ -536,7 +545,16 @@ export const SEED: AppData = {
       // Coarse salt runs lighter than table salt, about 5 g per tsp.
       perPackage: { amount: 200, unit: "tsp" },
     },
-    { id: "p-black-pepper", name: "black pepper", packageLabel: "no price yet", priceCad: null },
+    {
+      // 85 g of peppercorns at roughly 2.3 g per tsp ground, so about 37 tsp.
+      id: "p-black-pepper",
+      name: "black pepper",
+      packageLabel: "85 g bag, Great Value Whole Black Peppercorns",
+      priceCad: 2.27,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 37, unit: "tsp" },
+    },
     {
       id: "p-garlic",
       name: "garlic",
@@ -613,8 +631,26 @@ export const SEED: AppData = {
       perPackage: { amount: 15, unit: "cups" },
     },
     { id: "p-kosher-salt", name: "kosher salt", packageLabel: "no price yet", priceCad: null },
-    { id: "p-dried-oregano", name: "dried oregano", packageLabel: "no price yet", priceCad: null },
-    { id: "p-ground-cumin", name: "ground cumin", packageLabel: "no price yet", priceCad: null },
+    {
+      // 32 g of whole dried leaves at roughly 1 g per tsp, so about 32 tsp.
+      id: "p-dried-oregano",
+      name: "dried oregano",
+      packageLabel: "32 g bag, Great Value Oregano Leaves",
+      priceCad: 2.27,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 32, unit: "tsp" },
+    },
+    {
+      // 97 g at roughly 2.1 g per tsp, so about 46 tsp.
+      id: "p-ground-cumin",
+      name: "ground cumin",
+      packageLabel: "97 g bag, Great Value Ground Cumin",
+      priceCad: 2.27,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 46, unit: "tsp" },
+    },
     { id: "p-corn-tortillas", name: "corn tortillas", packageLabel: "no price yet", priceCad: null },
     { id: "p-white-onion", name: "white onion", packageLabel: "no price yet", priceCad: null },
     { id: "p-cilantro", name: "cilantro", packageLabel: "no price yet", priceCad: null },
@@ -652,11 +688,45 @@ export const SEED: AppData = {
     { id: "p-butter", name: "butter", packageLabel: "no price yet", priceCad: null },
     { id: "p-cornstarch", name: "cornstarch", packageLabel: "no price yet", priceCad: null },
     { id: "p-chocolate-chips", name: "chocolate chips", packageLabel: "no price yet", priceCad: null },
-    { id: "p-dates", name: "dates", packageLabel: "no price yet", priceCad: null },
+    {
+      // 375 g of pitted dates at roughly 150 g per chopped cup, so about 2.5 cups.
+      id: "p-dates",
+      name: "dates",
+      packageLabel: "375 g pack, Great Value Pitted Dates",
+      priceCad: 2.98,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 2.5, unit: "cups" },
+    },
     { id: "p-ground-beef", name: "ground beef", packageLabel: "no price yet", priceCad: null },
-    { id: "p-bell-pepper", name: "bell pepper", packageLabel: "no price yet", priceCad: null },
-    { id: "p-ketchup", name: "ketchup", packageLabel: "no price yet", priceCad: null },
-    { id: "p-worcestershire", name: "worcestershire sauce", packageLabel: "no price yet", priceCad: null },
+    {
+      id: "p-bell-pepper",
+      name: "bell pepper",
+      packageLabel: "3 pack, Sunset Rainbow XL Sweet Bell Peppers",
+      priceCad: 4.98,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 3, unit: "" },
+    },
+    {
+      id: "p-ketchup",
+      name: "ketchup",
+      packageLabel: "1 L bottle, French's Tomato Ketchup",
+      priceCad: 2.97,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 1000, unit: "ml" },
+    },
+    {
+      // The listing's $1.82 per 100 ml against $5.18 works out to the standard 284 ml bottle.
+      id: "p-worcestershire",
+      name: "worcestershire sauce",
+      packageLabel: "284 ml bottle, Lea & Perrins",
+      priceCad: 5.18,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 284, unit: "ml" },
+    },
     {
       id: "p-yellow-mustard",
       name: "yellow mustard",
@@ -666,7 +736,16 @@ export const SEED: AppData = {
       lastChecked: "2026-08-30",
       perPackage: { amount: 400, unit: "ml" },
     },
-    { id: "p-paprika", name: "paprika", packageLabel: "no price yet", priceCad: null },
+    {
+      // 130 g at roughly 2.3 g per tsp, so about 56 tsp.
+      id: "p-paprika",
+      name: "paprika",
+      packageLabel: "130 g bag, Great Value",
+      priceCad: 2.27,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 56, unit: "tsp" },
+    },
     { id: "p-beef-broth", name: "beef broth", packageLabel: "no price yet", priceCad: null },
     {
       // Her words: about $7.50 for a rack at Gateway Meat Market. Priced by the rack
