@@ -157,6 +157,21 @@ textarea {
   background: linear-gradient(225deg, #e78bb1 0%, #d4699a 45%, #b04a7d 100%);
 }
 
+/*
+ * The book is a frame the height of the screen, and the pages scroll inside it. Before
+ * this the whole desk scrolled, so a closed book meant sliding down a long stretch of
+ * sky to reach nothing. 100dvh first, with 100vh behind it for browsers without it.
+ */
+.book-frame {
+  height: 100vh;
+  height: 100dvh;
+}
+.book-pages {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* The closed front cover; opens on its left hinge like a real book */
 .book-perspective {
   perspective: 2200px;

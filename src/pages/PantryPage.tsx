@@ -77,7 +77,7 @@ export default function PantryPage() {
           {needCount > 0 ? `${needCount} ${needCount === 1 ? "jar is" : "jars are"} still waiting on a price` : "every jar is priced"}
         </p>
         <button className={`${buttonSecondary} mt-3`} onClick={() => navigate("/plan")}>
-          Back out through the door
+          Back to the week
         </button>
       </div>
 
@@ -181,12 +181,9 @@ export default function PantryPage() {
                   <span className="block px-2.5 pb-2.5 pt-1">
                     <span className="block truncate text-sm font-bold capitalize text-plum">{item.name}</span>
                     <span className="mt-0.5 block truncate text-[10px] leading-tight text-plum-soft">{item.packageLabel}</span>
+                    {/* PriceProvenance says "price needed" on its own, so an unpriced jar shows it once. */}
                     <span className="mt-1 block">
-                      {item.priceCad !== null ? (
-                        <span className="font-bold text-gold">{formatCad(item.priceCad)}</span>
-                      ) : (
-                        <Badge tone="rose">price needed</Badge>
-                      )}
+                      {item.priceCad !== null && <span className="font-bold text-gold">{formatCad(item.priceCad)}</span>}
                     </span>
                     <span className="mt-0.5 block text-[10px]">
                       <PriceProvenance item={item} />

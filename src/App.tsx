@@ -12,6 +12,7 @@ import { useStore } from "./data/store";
 const TABS = [
   { to: "/", label: "The Book" },
   { to: "/plan", label: "Meal Plan" },
+  { to: "/pantry", label: "Pantry" },
 ];
 
 const SPARKLES = [
@@ -59,7 +60,7 @@ export default function App() {
   }
 
   return (
-    <div className="relative mx-auto max-w-3xl px-2 pb-10 pt-4 sm:px-4">
+    <div className="book-frame relative mx-auto flex max-w-3xl flex-col px-2 pb-3 pt-4 sm:px-4">
       {SPARKLES.map((s, i) => (
         <span
           key={i}
@@ -87,8 +88,8 @@ export default function App() {
         ))}
       </div>
 
-      <div className="book-perspective relative z-10">
-      <div className="book relative">
+      <div className="book-perspective relative z-10 min-h-0 flex-1">
+      <div className="book relative flex h-full flex-col">
         {coverState !== "opened" && (
           <button
             className={`book-cover ${coverState === "opening" ? "opening" : ""}`}
@@ -111,7 +112,7 @@ export default function App() {
           <span aria-hidden>✨</span>
         </button>
 
-        <header className="px-4 pt-6 text-center">
+        <header className="shrink-0 px-4 pt-6 text-center">
           <Tiara className="mx-auto h-6 w-14 text-gold" />
           {cloud && (
             <button className="mt-1 text-xs font-bold text-plum-soft underline" onClick={signOut}>
@@ -120,7 +121,7 @@ export default function App() {
           )}
         </header>
 
-        <main className="px-4 pb-10 pt-4 sm:px-8">
+        <main className="book-pages min-h-0 flex-1 px-4 pb-10 pt-4 sm:px-8">
           <Routes>
             <Route path="/" element={<BookPage />} />
             <Route path="/recipe/new" element={<RecipeFormPage />} />
