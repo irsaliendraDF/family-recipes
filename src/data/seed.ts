@@ -11,15 +11,17 @@ const REV3 = "2026-08-30T18:00:00.000Z";
 const REV4 = "2026-08-30T22:00:00.000Z";
 /** Fifth: the tomato paste can size, now that it is known. */
 const REV5 = "2026-08-30T23:00:00.000Z";
+/** Sixth: the coleslaw bag is the shredded cabbage, and it is 397 g, not a pound. */
+const REV6 = "2026-08-31T00:00:00.000Z";
 /** The newest revision. Every pantry item ships stamped with this. */
-const LATEST = REV5;
+const LATEST = REV6;
 
 /**
  * Every stamp the seed has ever used. A stored recipe carrying one of these has not
  * been edited in the app, so it is safe to refresh from the seed. Listed here rather
  * than copied into the store, because copying it is how a revision gets forgotten.
  */
-export const SEED_STAMPS = [NOW, REV1, REV2, REV3, REV4, REV5];
+export const SEED_STAMPS = [NOW, REV1, REV2, REV3, REV4, REV5, REV6];
 
 /**
  * Stamps every pantry item that ships with the app. A stored item still carrying one
@@ -410,7 +412,7 @@ export const SEED: AppData = {
       tags: [],
       ingredients: [
         { id: "e1", name: "ground pork", amount: 1, unit: "lb", note: "or ground beef, whichever you prefer" },
-        { id: "e2", name: "shredded cabbage", amount: 1, unit: "lb", note: "one package" },
+        { id: "e2", name: "shredded cabbage", amount: 397, unit: "g", note: "one bag of coleslaw, which is 397 g, a little under the pound in the spoken recipe" },
         { id: "e3", name: "ground ginger", amount: 1, unit: "tsp" },
         { id: "e4", name: "soy sauce", amount: 6, unit: "tbsp" },
         { id: "e5", name: "rice vinegar", amount: 2, unit: "tbsp" },
@@ -422,7 +424,7 @@ export const SEED: AppData = {
         "Add the shredded cabbage and the sauces to the browned meat, and cook until the cabbage is soft and most of the sauce has cooked into the cabbage and the meat.",
       ],
       createdAt: REV2,
-      updatedAt: REV3,
+      updatedAt: REV6,
     },
     {
       id: "irene-caldereta",
@@ -963,7 +965,17 @@ export const SEED: AppData = {
       perPackage: { amount: 425, unit: "ml" },
     },
     { id: "p-ground-pork", name: "ground pork", packageLabel: "no price yet", priceCad: null },
-    { id: "p-shredded-cabbage", name: "shredded cabbage", packageLabel: "no price yet", priceCad: null },
+    {
+      // Her words: this coleslaw is the shredded cabbage she uses. It is a mix, so it
+      // brings its own carrots and red cabbage with it.
+      id: "p-shredded-cabbage",
+      name: "shredded cabbage",
+      packageLabel: "397 g bag, Your Fresh Market Coleslaw, cabbage and carrots",
+      priceCad: 2.97,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 397, unit: "g" },
+    },
     { id: "p-ground-ginger", name: "ground ginger", packageLabel: "no price yet", priceCad: null },
     {
       id: "p-soy-sauce",
@@ -999,7 +1011,18 @@ export const SEED: AppData = {
       lastChecked: "2026-08-30",
       perPackage: { amount: 1, unit: "" },
     },
-    { id: "p-basil-leaves", name: "basil leaves", packageLabel: "no price yet, and they are the dried ones", priceCad: null },
+    {
+      // 50 g of dried leaves at roughly 0.5 g per tsp, so about 100 tsp. The recipe
+      // counts leaves rather than spoons, so this one will not cost out until that is
+      // settled; it is worth a couple of cents either way.
+      id: "p-basil-leaves",
+      name: "basil leaves",
+      packageLabel: "50 g bag, Great Value Basil Leaves, dried",
+      priceCad: 2.27,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 100, unit: "tsp" },
+    },
     {
       // A 2.27 kg (5 lb) bag at roughly 150 g a potato, so about 15 of them. That count
       // is the rough part, since potato size varies more than most things here.
