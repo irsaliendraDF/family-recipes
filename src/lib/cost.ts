@@ -12,15 +12,16 @@ export interface LineCost {
   /** Fraction of one package this line consumes, when computable. */
   packageFraction: number | null;
   costCad: number | null;
-  reason?: "no pantry item" | "price needed" | "units not convertible" | "unmeasured";
+  reason?: "no pantry item" | "price needed" | "package size needed" | "units not convertible" | "unmeasured";
 }
 
 export function costLine(line: IngredientLine, pantry: PantryItem[], scale: ScaleFactor): LineCost {
   const item = findPantryItem(pantry, line.name);
   if (!item) return { line, packageFraction: null, costCad: null, reason: "no pantry item" };
   if (line.amount === null) return { line, item, packageFraction: null, costCad: null, reason: "unmeasured" };
-  if (item.priceCad === null || !item.perPackage)
-    return { line, item, packageFraction: null, costCad: null, reason: "price needed" };
+  if (item.priceCad === null) return { line, item, packageFraction: null, costCad: null, reason: "price needed" };
+  // Priced, but nothing says how much the package holds, so a share of it cannot be worked out.
+  if (!item.perPackage) return { line, item, packageFraction: null, costCad: null, reason: "package size needed" };
   const inPackageUnits = convertAmount(line.amount * scale, line.unit, item.perPackage.unit);
   if (inPackageUnits === null)
     return { line, item, packageFraction: null, costCad: null, reason: "units not convertible" };

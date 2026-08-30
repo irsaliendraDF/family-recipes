@@ -987,7 +987,17 @@ export const SEED: AppData = {
       perPackage: { amount: 591, unit: "ml" },
     },
     { id: "p-rice-vinegar", name: "rice vinegar", packageLabel: "no price yet", priceCad: null },
-    { id: "p-oyster-sauce", name: "oyster sauce", packageLabel: "no price yet", priceCad: null },
+    {
+      // The listing's 58 cents per 100 g against $2.98 puts the bottle at the standard
+      // 510 g. Oyster sauce runs about 1.2 g per ml, so roughly 425 ml of spoonfuls.
+      id: "p-oyster-sauce",
+      name: "oyster sauce",
+      packageLabel: "510 g bottle, Lee Kum Kee Panda, $2.98 on sale from $4.27",
+      priceCad: 2.98,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 425, unit: "ml" },
+    },
     {
       // Her second, more accurate figure: about $9 a pound at Gateway Meat Market, and
       // she buys about a 3 lb roast. Priced by the pound so any roast size costs out.
@@ -1034,9 +1044,38 @@ export const SEED: AppData = {
       lastChecked: "2026-08-30",
       perPackage: { amount: 15, unit: "" },
     },
-    { id: "p-carrots", name: "carrots", packageLabel: "no price yet", priceCad: null },
-    { id: "p-spicy-pickles", name: "spicy pickles", packageLabel: "no price yet", priceCad: null },
-    { id: "p-olives", name: "olives", packageLabel: "no price yet", priceCad: null },
+    {
+      // A 3 lb bag at roughly 70 g a carrot, so about 19 of them. The count is the rough
+      // part; hers are small ones, so a bag may go further.
+      id: "p-carrots",
+      name: "carrots",
+      packageLabel: "3 lb bag, Your Fresh Market, about 19 carrots",
+      priceCad: 3.94,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 19, unit: "" },
+    },
+    {
+      // The listing's 55 cents per 100 ml against $2.77 puts the jar at about 500 ml.
+      // No perPackage: the recipe counts pickles and the jar sells by volume, and how
+      // many slices a jar holds is not something to guess at.
+      id: "p-spicy-pickles",
+      name: "spicy pickles",
+      packageLabel: "about 500 ml jar, Great Value Hot & Spicy Sandwich Pickles, sliced",
+      priceCad: 2.77,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+    },
+    {
+      // Same as the pickles: priced, but the recipe counts olives and the jar sells by
+      // volume, so it does not cost out until a jar's worth of batches is known.
+      id: "p-olives",
+      name: "olives",
+      packageLabel: "375 ml jar, Unico Stuffed Manzanilla Olives",
+      priceCad: 3.27,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+    },
     { id: "p-jalapeno", name: "jalapeno peppers", packageLabel: "no price yet", priceCad: null },
     {
       id: "p-pickle-juice",

@@ -13,6 +13,7 @@ import { Badge, Card, FlourishDivider, buttonSecondary } from "../components/ui"
  */
 const EXCLUSION_LABELS = [
   { reasons: ["price needed", "no pantry item"], label: "Left out, still needs a price" },
+  { reasons: ["package size needed"], label: "Left out, priced but the package size is not known" },
   { reasons: ["unmeasured"], label: "Left out, no amount written down" },
   { reasons: ["units not convertible"], label: "Left out, the recipe unit does not match the package" },
 ];
