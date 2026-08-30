@@ -51,4 +51,5 @@ export function convertAmount(amount: number, fromUnit: string, toUnit: string):
   return null;
 }
 
-export const KITCHEN_UNITS = ["", "tsp", "tbsp", "cups", "ml", "l", "g", "kg", "oz", "lb"];
+// "rack" is here because she buys ribs by the rack; it converts only to itself.
+export const KITCHEN_UNITS = ["", "tsp", "tbsp", "cups", "ml", "l", "g", "kg", "oz", "lb", "rack"];

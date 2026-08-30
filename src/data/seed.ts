@@ -3,6 +3,8 @@ import type { AppData } from "../types";
 const NOW = "2026-08-29T00:00:00.000Z";
 /** Stamp for seed entries revised 2026-08-30; lets pristine stored copies refresh. */
 const REV1 = "2026-08-30T00:00:00.000Z";
+/** Second revision the same day: her Gateway Meat Market prices. */
+const REV2 = "2026-08-30T12:00:00.000Z";
 
 /**
  * One sample recipe so every screen can be tested before Irene's real
@@ -343,14 +345,14 @@ export const SEED: AppData = {
     {
       id: "irene-country-pork-ribs",
       title: "Country Style Pork Ribs",
-      story: "Low and slow, three hours covered, then finished with BBQ sauce. Amount of ribs and servings not recorded yet.",
+      story: "Low and slow, three hours covered, then finished with BBQ sauce. One rack, and how many it feeds is not recorded yet.",
       category: "Dinner",
       servings: 1,
       prepMin: 15,
       cookMin: 210,
       tags: [],
       ingredients: [
-        { id: "r1", name: "country style pork ribs", amount: null, unit: "", note: "amount not recorded yet" },
+        { id: "r1", name: "country style pork ribs", amount: 1, unit: "rack", note: "her words: a rack, weight not recorded yet" },
         { id: "r2", name: "yellow mustard", amount: null, unit: "", note: "to rub the ribs before the seasoning" },
         { id: "r3", name: "brown sugar", amount: 2, unit: "tbsp" },
         { id: "r4", name: "smoked paprika", amount: 2, unit: "tbsp" },
@@ -370,7 +372,7 @@ export const SEED: AppData = {
         "Brush with BBQ sauce and return uncovered for 20 to 30 minutes.",
       ],
       createdAt: REV1,
-      updatedAt: REV1,
+      updatedAt: REV2,
     },
   ],
   pantry: [
@@ -512,7 +514,18 @@ export const SEED: AppData = {
       lastChecked: "2026-08-30",
       perPackage: { amount: 48, unit: "tsp" },
     },
-    { id: "p-whole-chicken", name: "whole chicken", packageLabel: "no price yet", priceCad: null },
+    {
+      // Her words: about $12 for a whole chicken at Gateway Meat Market. The 1.5 kg is
+      // the weight her own recipe calls for, treated as one bird until she confirms
+      // what the ones she buys actually weigh.
+      id: "p-whole-chicken",
+      name: "whole chicken",
+      packageLabel: "one whole chicken, Gateway Meat Market, weight not confirmed",
+      priceCad: 12,
+      priceSource: "irene",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 1.5, unit: "kg" },
+    },
     {
       id: "p-sea-salt",
       name: "coarse sea salt",
@@ -655,7 +668,17 @@ export const SEED: AppData = {
     },
     { id: "p-paprika", name: "paprika", packageLabel: "no price yet", priceCad: null },
     { id: "p-beef-broth", name: "beef broth", packageLabel: "no price yet", priceCad: null },
-    { id: "p-pork-ribs", name: "country style pork ribs", packageLabel: "no price yet", priceCad: null },
+    {
+      // Her words: about $7.50 for a rack at Gateway Meat Market. Priced by the rack
+      // because that is how she buys it; the weight of a rack is still unrecorded.
+      id: "p-pork-ribs",
+      name: "country style pork ribs",
+      packageLabel: "one rack, Gateway Meat Market",
+      priceCad: 7.5,
+      priceSource: "irene",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 1, unit: "rack" },
+    },
     { id: "p-smoked-paprika", name: "smoked paprika", packageLabel: "no price yet", priceCad: null },
     { id: "p-garlic-powder", name: "garlic powder", packageLabel: "no price yet", priceCad: null },
     { id: "p-onion-powder", name: "onion powder", packageLabel: "no price yet", priceCad: null },
