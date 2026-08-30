@@ -873,7 +873,17 @@ export const SEED: AppData = {
       lastChecked: "2026-08-30",
       perPackage: { amount: 2.5, unit: "cups" },
     },
-    { id: "p-ground-beef", name: "ground beef", packageLabel: "no price yet", priceCad: null },
+    {
+      // Her instruction: average the two she buys. Lean at $8.92 and medium at $8.28,
+      // both 450 g packs from Your Fresh Market, so $8.60.
+      id: "p-ground-beef",
+      name: "ground beef",
+      packageLabel: "450 g pack, Your Fresh Market, the average of lean at $8.92 and medium at $8.28",
+      priceCad: 8.6,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 450, unit: "g" },
+    },
     {
       id: "p-bell-pepper",
       name: "bell pepper",
@@ -1115,7 +1125,15 @@ export const SEED: AppData = {
     },
     { id: "p-jalapeno", name: "jalapeno peppers", packageLabel: "no price yet", priceCad: null },
     // The listing she sent showed the jar but its price was cut off the screenshot.
-    { id: "p-peperoncini", name: "peperoncini peppers", packageLabel: "750 ml jar, Unico Peperoncini Peppers, price not readable on the listing", priceCad: null },
+    {
+      id: "p-peperoncini",
+      name: "peperoncini peppers",
+      packageLabel: "750 ml jar, Unico Peperoncini Peppers",
+      priceCad: 3.77,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 750, unit: "ml" },
+    },
     {
       id: "p-pickle-juice",
       name: "pickle juice",
