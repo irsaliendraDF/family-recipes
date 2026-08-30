@@ -1,27 +1,11 @@
-import { useState } from "react";
-import { DAYS, SLOTS, type PantryItem, type ScaleFactor } from "../types";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { DAYS, SLOTS, type ScaleFactor } from "../types";
 import { newId, useStore } from "../data/store";
-import { buildGroceryList, type GroceryEntry } from "../lib/cost";
-import { formatCad } from "../lib/fractions";
-import { normalizeName } from "../lib/units";
-import { Badge, Card, PageHeading, PriceProvenance, buttonPrimary, buttonSecondary } from "../components/ui";
-import { PantryEditor } from "../components/PantryEditor";
+import { Card, PageHeading, buttonPrimary, buttonSecondary } from "../components/ui";
 
 const NEXT_SCALE: Record<string, ScaleFactor> = { "1": 2, "2": 0.5, "0.5": 1 };
 const CATEGORY_FILTERS = ["All", "Breakfast", "Lunch", "Dinner", "Side", "Dessert", "Snack", "Baking"];
-
-/**
- * Why a grocery line has no cost. An ingredient can be perfectly well priced and still
- * not count, because the recipe never said how much of it to use. Saying "price needed"
- * for both sends her looking up a price that is already in the book.
- */
-function gapOf(entry: GroceryEntry): { label: string; tone: "rose" | "plain" } {
-  const reasons = new Set(entry.uncosted.map((u) => u.reason));
-  if (reasons.has("price needed") || reasons.has("no pantry item")) return { label: "price needed", tone: "rose" };
-  if (reasons.has("package size needed")) return { label: "package size needed", tone: "plain" };
-  if (reasons.has("units not convertible")) return { label: "units do not match", tone: "plain" };
-  return { label: "no amount set", tone: "plain" };
-}
 
 /** The household the plan feeds. */
 const FAMILY_SIZE = 2;
@@ -215,7 +199,7 @@ export default function MealPlanPage() {
         ))}
       </div>
 
-      <PantrySection planId={plan.id} />
+      <PantryDoor />
 
       <div className="mt-6 text-center">
         <button
@@ -233,171 +217,45 @@ export default function MealPlanPage() {
   );
 }
 
-/** The pantry lives behind its door: the grocery list for the week, then every ingredient and its price. */
-function PantrySection({ planId }: { planId: string }) {
-  const { data, upsertPlan, upsertPantryItem, deletePantryItem } = useStore();
-  const [open, setOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
+/**
+ * The pantry door. It swings on its hinge and, once it has finished swinging, walks you
+ * into the pantry itself. The doorway behind it is dark and warm, so what shows while
+ * the door moves is the room, not the page underneath.
+ */
+function PantryDoor() {
+  const navigate = useNavigate();
+  const [swinging, setSwinging] = useState(false);
 
-  const plan = data.plans.find((p) => p.id === planId);
-  if (!plan) return null;
-
-  const list = buildGroceryList(plan, data.recipes, data.pantry);
-  const checked = new Set(plan.checkedNames.map(normalizeName));
-  const have = new Set(plan.haveNames.map(normalizeName));
-
-  function toggle(listName: "checkedNames" | "haveNames", name: string) {
-    if (!plan) return;
-    const key = normalizeName(name);
-    const current = plan[listName].map(normalizeName);
-    upsertPlan({
-      ...plan,
-      [listName]: current.includes(key) ? plan[listName].filter((n) => normalizeName(n) !== key) : [...plan[listName], name],
-      updatedAt: new Date().toISOString(),
-    });
-  }
-
-  const usedIn = (item: PantryItem) =>
-    data.recipes.filter((r) => r.ingredients.some((i) => normalizeName(i.name) === normalizeName(item.name))).length;
-
-  const sortedPantry = [...data.pantry].sort((a, b) => {
-    const aNeeds = a.priceCad === null ? 0 : 1;
-    const bNeeds = b.priceCad === null ? 0 : 1;
-    if (aNeeds !== bNeeds) return aNeeds - bNeeds;
-    return (a.lastChecked ?? "") < (b.lastChecked ?? "") ? -1 : 1;
-  });
-  const needCount = data.pantry.filter((p) => p.priceCad === null).length;
+  // The swing is what walks her through, so the walk cannot depend on it. Someone with
+  // reduced motion turned on gets no transition and therefore no transition end, and a
+  // hidden or backgrounded tab does not animate either. This gets her in regardless.
+  useEffect(() => {
+    if (!swinging) return;
+    const timer = setTimeout(() => navigate("/pantry"), 700);
+    return () => clearTimeout(timer);
+  }, [swinging, navigate]);
 
   return (
-    <div className="mt-6">
+    <div className="mt-8">
       <div className="pantry-door-wrap relative">
-        <button className={`pantry-door relative z-10 w-full p-6 text-left ${open ? "open" : ""}`} onClick={() => setOpen(!open)}>
+        <div className="pantry-doorway absolute inset-0 flex items-center justify-center">
+          <span className="font-script text-2xl text-[#f3dfae]/80">step inside</span>
+        </div>
+        <button
+          className={`pantry-door relative z-10 w-full p-6 text-left ${swinging ? "open" : ""}`}
+          onClick={() => setSwinging(true)}
+          aria-label="Open the pantry door"
+        >
           <span className="block rounded border-2 border-gold-soft/70 bg-[#3d2413]/40 px-4 py-2 text-center">
             <span className="font-script text-3xl text-gold-soft">The Pantry</span>
-            <span className="block text-xs font-bold text-[#e8d5a8]">{open ? "tap to close the door" : "tap to open the door"}</span>
+            <span className="block text-xs font-bold text-[#e8d5a8]">
+              {swinging ? "opening..." : "tap to open the door"}
+            </span>
           </span>
           <span className="absolute right-4 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-gold-soft shadow" aria-hidden />
         </button>
       </div>
-
-      {open && (
-        <div className="mt-3 space-y-4">
-          <Card className="border-gold bg-gold-soft/20 p-4">
-            <h2 className="font-display text-xl font-bold">This week's groceries</h2>
-            {list.totalCad > 0 && (
-              <p className="mt-1 text-2xl font-bold text-gold">
-                approx {formatCad(list.totalCad)}
-                {list.hasSamplePrices && <span className="ml-2 text-xs font-normal">(sample prices, not real)</span>}
-              </p>
-            )}
-            {list.excludedNames.length > 0 && (
-              <p className="mt-1 text-xs text-plum-soft">Not in the total: {list.excludedNames.join(", ")}</p>
-            )}
-            {list.entries.length === 0 && <p className="mt-2 text-sm text-plum-soft">Place recipes in the week and the list fills itself.</p>}
-            <ul className="mt-3 space-y-2">
-              {[...list.entries]
-                .sort((a, b) => {
-                  const aDone = checked.has(normalizeName(a.name)) || have.has(normalizeName(a.name)) ? 1 : 0;
-                  const bDone = checked.has(normalizeName(b.name)) || have.has(normalizeName(b.name)) ? 1 : 0;
-                  return aDone - bDone || a.name.localeCompare(b.name);
-                })
-                .map((entry) => {
-                  const key = normalizeName(entry.name);
-                  const isHave = have.has(key);
-                  const isChecked = checked.has(key);
-                  return (
-                    <li key={entry.name} className={`rounded-xl p-3 ${isChecked || isHave ? "bg-parchment/60 opacity-60" : "bg-white/80"}`}>
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => toggle("checkedNames", entry.name)}
-                          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 text-lg font-bold ${
-                            isChecked ? "border-gold bg-gold text-white" : "border-gold-soft text-transparent"
-                          }`}
-                          aria-label={`Check off ${entry.name}`}
-                        >
-                          ✓
-                        </button>
-                        <div className="min-w-0 flex-1">
-                          <p className={`font-bold capitalize ${isChecked ? "line-through" : ""}`}>{entry.name}</p>
-                          <p className="truncate text-xs text-plum-soft">
-                            {entry.packages !== null && entry.item ? `${entry.packages} × ${entry.item.packageLabel}` : "amount as needed"}
-                            {" · "}
-                            {entry.usedIn.join(", ")}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          {entry.costCad !== null ? (
-                            <p className="font-bold text-gold">{formatCad(entry.costCad)}</p>
-                          ) : (
-                            <Badge tone={gapOf(entry).tone}>{gapOf(entry).label}</Badge>
-                          )}
-                          <button className="mt-1 block text-xs font-bold text-lavender" onClick={() => toggle("haveNames", entry.name)}>
-                            {isHave ? "need it after all" : "have it"}
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                  );
-                })}
-            </ul>
-          </Card>
-
-          <Card className="p-4">
-            <h2 className="font-display text-xl font-bold">Every ingredient on the shelves</h2>
-            {needCount > 0 && (
-              <p className="mt-1 text-sm text-plum-soft">
-                <strong>{needCount}</strong> {needCount === 1 ? "needs" : "need"} a Walmart price. Ask Claude to look them up, or tap one to
-                enter it yourself.
-              </p>
-            )}
-            <div className="mt-3 space-y-2">
-              {sortedPantry.map((item) =>
-                editingId === item.id ? (
-                  <PantryEditor
-                    key={item.id}
-                    item={item}
-                    onSave={(updated) => {
-                      upsertPantryItem(updated);
-                      setEditingId(null);
-                    }}
-                    onDelete={() => {
-                      deletePantryItem(item.id);
-                      setEditingId(null);
-                    }}
-                    onCancel={() => setEditingId(null)}
-                  />
-                ) : (
-                  <button
-                    key={item.id}
-                    className="block w-full rounded-lg border border-gold-soft/60 bg-white/70 p-2.5 text-left"
-                    onClick={() => setEditingId(item.id)}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="min-w-0">
-                        <p className="truncate font-bold capitalize">{item.name}</p>
-                        <p className="truncate text-xs text-plum-soft">{item.packageLabel}</p>
-                      </div>
-                      <div className="shrink-0 text-right">
-                        {item.priceCad !== null ? (
-                          <p className="font-bold text-gold">{formatCad(item.priceCad)}</p>
-                        ) : (
-                          <Badge tone="rose">price needed</Badge>
-                        )}
-                        <div className="text-xs">
-                          <PriceProvenance item={item} />
-                        </div>
-                      </div>
-                    </div>
-                    <p className="mt-1 text-[10px] text-plum-soft">
-                      in {usedIn(item)} {usedIn(item) === 1 ? "recipe" : "recipes"}
-                    </p>
-                  </button>
-                ),
-              )}
-            </div>
-          </Card>
-        </div>
-      )}
     </div>
   );
 }
+

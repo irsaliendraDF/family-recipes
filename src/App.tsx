@@ -4,6 +4,7 @@ import BookPage from "./pages/BookPage";
 import RecipePage from "./pages/RecipePage";
 import RecipeFormPage from "./pages/RecipeFormPage";
 import MealPlanPage from "./pages/MealPlanPage";
+import PantryPage from "./pages/PantryPage";
 import SuggestionsPage from "./pages/SuggestionsPage";
 import { Tiara } from "./components/ui";
 import { useStore } from "./data/store";
@@ -126,6 +127,7 @@ export default function App() {
             <Route path="/recipe/:id" element={<RecipePage />} />
             <Route path="/recipe/:id/edit" element={<RecipeFormPage />} />
             <Route path="/plan" element={<MealPlanPage />} />
+            <Route path="/pantry" element={<PantryPage />} />
             <Route path="/smart" element={<SuggestionsPage />} />
           </Routes>
         </main>

@@ -288,7 +288,79 @@ textarea {
   box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.25);
 }
 .pantry-door.open {
-  transform: rotateY(-84deg);
+  transform: rotateY(-96deg);
+}
+
+/* What the door reveals as it swings: a dark room with a warm light in it */
+.pantry-doorway {
+  border-radius: 0.6rem;
+  background:
+    radial-gradient(75% 60% at 50% 30%, rgba(255, 214, 140, 0.35), transparent 70%),
+    linear-gradient(180deg, #3a2213 0%, #241408 100%);
+  box-shadow: inset 0 0 44px rgba(0, 0, 0, 0.8);
+}
+
+/* Standing inside the pantry: boards on the walls, a light overhead */
+.pantry-room {
+  border-radius: 1rem;
+  background:
+    radial-gradient(120% 55% at 50% -8%, rgba(255, 221, 150, 0.4), transparent 62%),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0 3px, transparent 3px 58px),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 120px),
+    linear-gradient(180deg, #7c5133 0%, #5d3a22 45%, #3f2614 100%);
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.55);
+}
+.pantry-sign {
+  color: #f6e3b4;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+}
+.pantry-heading {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f3dfae;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* A shelf: whatever sits on it rests on a wooden plank with a shadow beneath */
+.pantry-shelf {
+  position: relative;
+  padding-bottom: 16px;
+}
+.pantry-shelf::after {
+  content: "";
+  position: absolute;
+  left: -6px;
+  right: -6px;
+  bottom: 0;
+  height: 13px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #c79a6a 0%, #9a6840 40%, #6b4426 100%);
+  box-shadow:
+    0 7px 14px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* An ingredient, standing on the shelf as a labelled jar */
+.pantry-jar {
+  display: block;
+  border-radius: 0.35rem 0.35rem 0.5rem 0.5rem;
+  background: linear-gradient(180deg, #fdf6e6 0%, #f4e7cd 100%);
+  border: 1px solid rgba(122, 79, 49, 0.35);
+  box-shadow:
+    0 5px 10px rgba(0, 0, 0, 0.4),
+    inset 0 -6px 12px rgba(122, 79, 49, 0.12);
+  transition: transform 0.15s ease;
+}
+.pantry-jar:active {
+  transform: translateY(2px);
+}
+.pantry-jar-lid {
+  display: block;
+  height: 9px;
+  border-radius: 0.3rem 0.3rem 0 0;
+  background: linear-gradient(180deg, #b98a5c, #8a5a3b);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 /* Twinkling sparkles on the desk around the book */
