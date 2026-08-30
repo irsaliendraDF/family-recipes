@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DAYS, SLOTS, type PantryItem, type ScaleFactor } from "../types";
 import { newId, useStore } from "../data/store";
-import { buildGroceryList } from "../lib/cost";
+import { buildGroceryList, type GroceryEntry } from "../lib/cost";
 import { formatCad } from "../lib/fractions";
 import { normalizeName } from "../lib/units";
 import { Badge, Card, PageHeading, PriceProvenance, buttonPrimary, buttonSecondary } from "../components/ui";
@@ -9,6 +9,19 @@ import { PantryEditor } from "../components/PantryEditor";
 
 const NEXT_SCALE: Record<string, ScaleFactor> = { "1": 2, "2": 0.5, "0.5": 1 };
 const CATEGORY_FILTERS = ["All", "Breakfast", "Lunch", "Dinner", "Side", "Dessert", "Snack", "Baking"];
+
+/**
+ * Why a grocery line has no cost. An ingredient can be perfectly well priced and still
+ * not count, because the recipe never said how much of it to use. Saying "price needed"
+ * for both sends her looking up a price that is already in the book.
+ */
+function gapOf(entry: GroceryEntry): { label: string; tone: "rose" | "plain" } {
+  const reasons = new Set(entry.uncosted.map((u) => u.reason));
+  if (reasons.has("price needed") || reasons.has("no pantry item")) return { label: "price needed", tone: "rose" };
+  if (reasons.has("package size needed")) return { label: "package size needed", tone: "plain" };
+  if (reasons.has("units not convertible")) return { label: "units do not match", tone: "plain" };
+  return { label: "no amount set", tone: "plain" };
+}
 
 /** The household the plan feeds. */
 const FAMILY_SIZE = 2;
@@ -278,7 +291,7 @@ function PantrySection({ planId }: { planId: string }) {
               </p>
             )}
             {list.excludedNames.length > 0 && (
-              <p className="mt-1 text-xs text-plum-soft">Not in the total (price needed): {list.excludedNames.join(", ")}</p>
+              <p className="mt-1 text-xs text-plum-soft">Not in the total: {list.excludedNames.join(", ")}</p>
             )}
             {list.entries.length === 0 && <p className="mt-2 text-sm text-plum-soft">Place recipes in the week and the list fills itself.</p>}
             <ul className="mt-3 space-y-2">
@@ -316,7 +329,7 @@ function PantrySection({ planId }: { planId: string }) {
                           {entry.costCad !== null ? (
                             <p className="font-bold text-gold">{formatCad(entry.costCad)}</p>
                           ) : (
-                            <Badge tone="rose">price needed</Badge>
+                            <Badge tone={gapOf(entry).tone}>{gapOf(entry).label}</Badge>
                           )}
                           <button className="mt-1 block text-xs font-bold text-lavender" onClick={() => toggle("haveNames", entry.name)}>
                             {isHave ? "need it after all" : "have it"}

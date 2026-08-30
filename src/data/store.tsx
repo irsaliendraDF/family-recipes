@@ -73,23 +73,32 @@ function missingSeed(data: AppData): { recipes: Recipe[]; pantry: PantryItem[]; 
   };
 }
 
+/**
+ * Drops pantry entries that no longer belong to anything: never priced, no longer in
+ * the seed, and not named by any recipe. That is how an ingredient retired from a
+ * recipe (cilantro out of the carnitas, smoked paprika off the ribs) stops sitting in
+ * her list asking for a price it will never need. Anything priced is kept, always,
+ * and so is anything a recipe still calls for.
+ */
+function prunePantry(pantry: PantryItem[], recipes: Recipe[]): PantryItem[] {
+  const seedNames = new Set(SEED.pantry.map((p) => normalizeName(p.name)));
+  const used = new Set(recipes.flatMap((r) => r.ingredients.map((line) => normalizeName(line.name))));
+  return pantry.filter((p) => p.priceCad !== null || seedNames.has(normalizeName(p.name)) || used.has(normalizeName(p.name)));
+}
+
 function withHerRecipes(data: AppData): AppData {
   const extra = missingSeed(data);
-  if (extra.recipes.length === 0 && extra.pantry.length === 0 && extra.refreshed.length === 0 && extra.pricedPantry.length === 0)
-    return data;
   const refreshedById = new Map(extra.refreshed.map((r) => [r.id, r]));
   const pricedByName = new Map(extra.pricedPantry.map((p) => [normalizeName(p.name), p]));
-  return {
-    ...data,
-    recipes: [...data.recipes.map((r) => refreshedById.get(r.id) ?? r), ...extra.recipes],
-    pantry: [
-      ...data.pantry.map((p) => {
-        const priced = pricedByName.get(normalizeName(p.name));
-        return priced ? { ...priced, id: p.id } : p;
-      }),
-      ...extra.pantry,
-    ],
-  };
+  const recipes = [...data.recipes.map((r) => refreshedById.get(r.id) ?? r), ...extra.recipes];
+  const pantry = [
+    ...data.pantry.map((p) => {
+      const priced = pricedByName.get(normalizeName(p.name));
+      return priced ? { ...priced, id: p.id } : p;
+    }),
+    ...extra.pantry,
+  ];
+  return { ...data, recipes, pantry: prunePantry(pantry, recipes) };
 }
 
 function loadLocal(): AppData | null {
@@ -193,6 +202,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         remoteUpsert(TABLE_OF.recipes, [...extra.recipes, ...extra.refreshed]);
         const pricedNames = new Set(extra.pricedPantry.map((p) => normalizeName(p.name)));
         remoteUpsert(TABLE_OF.pantry, [...extra.pantry, ...merged.pantry.filter((p) => pricedNames.has(normalizeName(p.name)))]);
+        // Anything the prune dropped goes from the database too, or it returns next load.
+        const kept = new Set(merged.pantry.map((p) => p.id));
+        for (const gone of current.pantry.filter((p) => !kept.has(p.id))) remoteDelete(TABLE_OF.pantry, gone.id);
         setData(merged);
       }
       setStatus("ready");

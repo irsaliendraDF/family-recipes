@@ -13,15 +13,17 @@ const REV4 = "2026-08-30T22:00:00.000Z";
 const REV5 = "2026-08-30T23:00:00.000Z";
 /** Sixth: the coleslaw bag is the shredded cabbage, and it is 397 g, not a pound. */
 const REV6 = "2026-08-31T00:00:00.000Z";
+/** Seventh: minced ginger, the pepperoncini, per-piece costs and 15 cookies. */
+const REV7 = "2026-08-31T02:00:00.000Z";
 /** The newest revision. Every pantry item ships stamped with this. */
-const LATEST = REV6;
+const LATEST = REV7;
 
 /**
  * Every stamp the seed has ever used. A stored recipe carrying one of these has not
  * been edited in the app, so it is safe to refresh from the seed. Listed here rather
  * than copied into the store, because copying it is how a revision gets forgotten.
  */
-export const SEED_STAMPS = [NOW, REV1, REV2, REV3, REV4, REV5, REV6];
+export const SEED_STAMPS = [NOW, REV1, REV2, REV3, REV4, REV5, REV6, REV7];
 
 /**
  * Stamps every pantry item that ships with the app. A stored item still carrying one
@@ -46,6 +48,7 @@ export const SEED: AppData = {
       story: "Makes 11 to 12 muffins.",
       category: "Baking",
       servings: 12,
+      servingNoun: "muffin",
       prepMin: 15,
       cookMin: 22,
       tags: [],
@@ -77,7 +80,7 @@ export const SEED: AppData = {
         "Tip: fresh berries work best; frozen ones go in straight from the freezer, unthawed, so they do not bleed purple into the batter.",
       ],
       createdAt: NOW,
-      updatedAt: NOW,
+      updatedAt: REV7,
     },
     {
       id: "irene-banana-bread",
@@ -151,6 +154,7 @@ export const SEED: AppData = {
         "Her way: the dough gets scooped with an ice cream scoop into about 18 large cookies and frozen, then baked straight from frozen.",
       category: "Dessert",
       servings: 18,
+      servingNoun: "cookie",
       prepMin: 15,
       cookMin: 21,
       tags: [],
@@ -172,7 +176,7 @@ export const SEED: AppData = {
         "Bake from frozen on parchment-lined sheets at 350 F (175 C) for 21 minutes.",
       ],
       createdAt: NOW,
-      updatedAt: NOW,
+      updatedAt: REV7,
     },
     {
       id: "irene-pork-carnitas",
@@ -180,6 +184,7 @@ export const SEED: AppData = {
       story: "Slow-braised pork, shredded and crisped under the broiler. Makes 8 tacos, feeds 2 for about 3 to 4 days.",
       category: "Dinner",
       servings: 8,
+      servingNoun: "taco",
       prepMin: 15,
       cookMin: 160,
       tags: [],
@@ -197,7 +202,6 @@ export const SEED: AppData = {
         { id: "t11", name: "black pepper", amount: 0.5, unit: "tsp" },
         { id: "t12", name: "corn tortillas", amount: null, unit: "", note: "small, for serving" },
         { id: "t13", name: "white onion", amount: null, unit: "", note: "finely diced, for serving" },
-        { id: "t14", name: "cilantro", amount: null, unit: "", note: "fresh, for serving" },
         { id: "t15", name: "salsa", amount: null, unit: "", note: "your favourite, for serving" },
       ],
       steps: [
@@ -205,10 +209,10 @@ export const SEED: AppData = {
         "The slow braise, 2 to 2.5 hours: turn the heat down to low. Add the quartered onion and smashed garlic to the pot. Squeeze the juice of the orange and lime over the meat, then drop the spent citrus halves right into the pot. Pour in the 1/3 cup of stock or water. Cover tightly and simmer on low for 2 to 2.5 hours.",
         "Check for tenderness: the pork is ready when it is completely tender and breaks apart easily when pressed with a wooden spoon or fork. Remove from the heat. Discard the orange and lime skins, bay leaves, and large onion pieces.",
         "Shred and crisp, 10 min: preheat the broiler to high. Transfer the pork to a rimmed baking sheet and coarsely shred with two forks into bite-sized clusters (not too finely or it dries out). Ladle a few spoonfuls of the flavourful liquid and fat from the pot over the meat. Broil 5 to 8 minutes until the edges are deeply browned and crispy.",
-        "Serve in small corn tortillas with diced white onion, cilantro, lime wedges, and salsa.",
+        "Serve in small corn tortillas with diced white onion, lime wedges, and salsa. The source recipe finishes with cilantro; you leave it out, because Joel does not really like it.",
       ],
       createdAt: NOW,
-      updatedAt: REV1,
+      updatedAt: REV7,
     },
     {
       id: "irene-pandesal",
@@ -216,6 +220,7 @@ export const SEED: AppData = {
       story: "Bread machine dough, then shaped and baked. Makes 24 pieces.",
       category: "Baking",
       servings: 24,
+      servingNoun: "piece",
       prepMin: 15,
       cookMin: 13,
       tags: [],
@@ -241,7 +246,7 @@ export const SEED: AppData = {
         "Bake at 350 F for 13 minutes (her timing).",
       ],
       createdAt: REV1,
-      updatedAt: REV1,
+      updatedAt: REV7,
     },
     {
       id: "irene-focaccia",
@@ -283,7 +288,8 @@ export const SEED: AppData = {
       title: "Chocolate Chip Cookies",
       story: "Makes 13 cookies. Scooped ice-cream-ball size and frozen; baked from frozen is the best of the two.",
       category: "Dessert",
-      servings: 13,
+      servings: 15,
+      servingNoun: "cookie",
       prepMin: 15,
       cookMin: 21,
       tags: [],
@@ -306,7 +312,7 @@ export const SEED: AppData = {
         "Fresh: bake 15 minutes.",
       ],
       createdAt: REV1,
-      updatedAt: REV1,
+      updatedAt: REV7,
     },
     {
       id: "irene-date-muffins",
@@ -314,6 +320,7 @@ export const SEED: AppData = {
       story: "Makes 9 muffins.",
       category: "Baking",
       servings: 9,
+      servingNoun: "muffin",
       prepMin: 15,
       cookMin: 30,
       tags: [],
@@ -336,7 +343,7 @@ export const SEED: AppData = {
         "Preheat the oven to 375 F and bake 25 to 30 minutes.",
       ],
       createdAt: REV1,
-      updatedAt: REV1,
+      updatedAt: REV7,
     },
     {
       id: "irene-sloppy-joes",
@@ -382,7 +389,7 @@ export const SEED: AppData = {
         { id: "r1", name: "country style pork ribs", amount: 1, unit: "rack", note: "her words: a rack, weight not recorded yet" },
         { id: "r2", name: "yellow mustard", amount: null, unit: "", note: "to rub the ribs before the seasoning" },
         { id: "r3", name: "brown sugar", amount: 2, unit: "tbsp" },
-        { id: "r4", name: "smoked paprika", amount: 2, unit: "tbsp" },
+        { id: "r4", name: "paprika", amount: 2, unit: "tbsp", note: "the regular one, which is what you use rather than smoked" },
         { id: "r5", name: "garlic powder", amount: 2, unit: "tsp" },
         { id: "r6", name: "onion powder", amount: 2, unit: "tsp" },
         { id: "r7", name: "chili powder", amount: 2, unit: "tsp" },
@@ -393,13 +400,13 @@ export const SEED: AppData = {
         { id: "r12", name: "bbq sauce", amount: null, unit: "", note: "for brushing at the end" },
       ],
       steps: [
-        "Mix the brown sugar, smoked paprika, garlic powder, onion powder, chili powder, chili flakes, salt, pepper and olive oil into a seasoning.",
+        "Mix the brown sugar, paprika, garlic powder, onion powder, chili powder, chili flakes, salt, pepper and olive oil into a seasoning.",
         "Rub the ribs with mustard, then the seasoning.",
         "Preheat the oven to 300 F and bake 3 hours covered, low and slow.",
         "Brush with BBQ sauce and return uncovered for 20 to 30 minutes.",
       ],
       createdAt: REV1,
-      updatedAt: REV2,
+      updatedAt: REV6,
     },
     {
       id: "irene-egg-roll-in-a-bowl",
@@ -411,9 +418,9 @@ export const SEED: AppData = {
       cookMin: 25,
       tags: [],
       ingredients: [
-        { id: "e1", name: "ground pork", amount: 1, unit: "lb", note: "or ground beef, whichever you prefer" },
+        { id: "e1", name: "ground pork", amount: 1, unit: "lb", note: "pork is the usual one here; ground beef also works" },
         { id: "e2", name: "shredded cabbage", amount: 397, unit: "g", note: "one bag of coleslaw, which is 397 g, a little under the pound in the spoken recipe" },
-        { id: "e3", name: "ground ginger", amount: 1, unit: "tsp" },
+        { id: "e3", name: "minced ginger", amount: 1, unit: "tsp", note: "the jarred minced, which is what you use rather than ground" },
         { id: "e4", name: "soy sauce", amount: 6, unit: "tbsp" },
         { id: "e5", name: "rice vinegar", amount: 2, unit: "tbsp" },
         { id: "e6", name: "oyster sauce", amount: 3, unit: "tbsp" },
@@ -424,7 +431,7 @@ export const SEED: AppData = {
         "Add the shredded cabbage and the sauces to the browned meat, and cook until the cabbage is soft and most of the sauce has cooked into the cabbage and the meat.",
       ],
       createdAt: REV2,
-      updatedAt: REV6,
+      updatedAt: REV7,
     },
     {
       id: "irene-caldereta",
@@ -451,6 +458,7 @@ export const SEED: AppData = {
         { id: "k13", name: "spicy pickles", amount: 4, unit: "", note: "her words: 3 to 4" },
         { id: "k14", name: "olives", amount: 8, unit: "", note: "her words: 6 to 8" },
         { id: "k15", name: "jalapeno peppers", amount: null, unit: "", note: "sometimes, for extra spice" },
+        { id: "k18", name: "peperoncini peppers", amount: null, unit: "", note: "the Unico jar, in sometimes; amount not recorded" },
         { id: "k16", name: "pickle juice", amount: 1, unit: "tbsp" },
       ],
       steps: [
@@ -463,7 +471,7 @@ export const SEED: AppData = {
         "Serve on a bed of rice, which is a side of its own rather than part of the pot.",
       ],
       createdAt: REV3,
-      updatedAt: REV5,
+      updatedAt: REV7,
     },
     {
       id: "irene-mashed-potatoes",
@@ -757,7 +765,17 @@ export const SEED: AppData = {
       // The can makes roughly 15 cups of stock made up per the label directions.
       perPackage: { amount: 15, unit: "cups" },
     },
-    { id: "p-kosher-salt", name: "kosher salt", packageLabel: "no price yet", priceCad: null },
+    {
+      // Her words: the kosher salt is the sea salt she already gave. Same bag, second
+      // line, because the carnitas sheet calls it kosher.
+      id: "p-kosher-salt",
+      name: "kosher salt",
+      packageLabel: "1 kg bag, Great Value Coarse Sea Salt, the same one as the sea salt",
+      priceCad: 1.17,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 200, unit: "tsp" },
+    },
     {
       // 32 g of whole dried leaves at roughly 1 g per tsp, so about 32 tsp.
       id: "p-dried-oregano",
@@ -780,7 +798,8 @@ export const SEED: AppData = {
     },
     { id: "p-corn-tortillas", name: "corn tortillas", packageLabel: "no price yet", priceCad: null },
     { id: "p-white-onion", name: "white onion", packageLabel: "no price yet", priceCad: null },
-    { id: "p-cilantro", name: "cilantro", packageLabel: "no price yet", priceCad: null },
+    // Cilantro is deliberately not here: it is in the source carnitas recipe but not in
+    // the version she makes, so there is nothing to buy and nothing to price.
     { id: "p-salsa", name: "salsa", packageLabel: "no price yet", priceCad: null },
     { id: "p-water", name: "water", packageLabel: "from the tap, no cost", priceCad: 0, priceSource: "irene", perPackage: { amount: 100, unit: "cups" } },
     {
@@ -914,7 +933,8 @@ export const SEED: AppData = {
       lastChecked: "2026-08-30",
       perPackage: { amount: 1, unit: "rack" },
     },
-    { id: "p-smoked-paprika", name: "smoked paprika", packageLabel: "no price yet", priceCad: null },
+    // Smoked paprika is deliberately not here: the ribs use the regular paprika, which
+    // is what she buys, so there is no smoked jar to price.
     {
       // 150 g at roughly 3 g per tsp, so about 50 tsp.
       id: "p-garlic-powder",
@@ -964,7 +984,15 @@ export const SEED: AppData = {
       lastChecked: "2026-08-30",
       perPackage: { amount: 425, unit: "ml" },
     },
-    { id: "p-ground-pork", name: "ground pork", packageLabel: "no price yet", priceCad: null },
+    {
+      id: "p-ground-pork",
+      name: "ground pork",
+      packageLabel: "454 g pack, Maple Leaf Lean Ground Pork",
+      priceCad: 4.97,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 454, unit: "g" },
+    },
     {
       // Her words: this coleslaw is the shredded cabbage she uses. It is a mix, so it
       // brings its own carrots and red cabbage with it.
@@ -976,7 +1004,16 @@ export const SEED: AppData = {
       lastChecked: "2026-08-30",
       perPackage: { amount: 397, unit: "g" },
     },
-    { id: "p-ground-ginger", name: "ground ginger", packageLabel: "no price yet", priceCad: null },
+    {
+      // 130 g of minced ginger at roughly 5 g a tsp, so about 26 tsp.
+      id: "p-minced-ginger",
+      name: "minced ginger",
+      packageLabel: "130 g jar, Aurora Minced Ginger",
+      priceCad: 2.97,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 26, unit: "tsp" },
+    },
     {
       id: "p-soy-sauce",
       name: "soy sauce",
@@ -1077,6 +1114,8 @@ export const SEED: AppData = {
       lastChecked: "2026-08-30",
     },
     { id: "p-jalapeno", name: "jalapeno peppers", packageLabel: "no price yet", priceCad: null },
+    // The listing she sent showed the jar but its price was cut off the screenshot.
+    { id: "p-peperoncini", name: "peperoncini peppers", packageLabel: "750 ml jar, Unico Peperoncini Peppers, price not readable on the listing", priceCad: null },
     {
       id: "p-pickle-juice",
       name: "pickle juice",

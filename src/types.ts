@@ -22,6 +22,12 @@ export interface Recipe {
   tags: string[];
   ingredients: IngredientLine[];
   steps: string[];
+  /**
+   * What one serving actually is, when it is a countable thing: a muffin, a cookie, a
+   * taco. Set only where the servings really are pieces, so the per-piece cost can be
+   * named honestly. Left off, a serving is just a serving.
+   */
+  servingNoun?: string;
   fromSuggestion?: boolean;
   isSample?: boolean;
   createdAt: string;

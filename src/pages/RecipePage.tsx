@@ -80,10 +80,18 @@ export default function RecipePage() {
       <Card className="border-gold bg-gold-soft/30">
         <h2 className="font-display text-xl font-bold">Approximate cost at {scale}x</h2>
         {cost.totalCad > 0 ? (
-          <p className="mt-1 text-2xl font-bold text-gold">
-            {formatCad(cost.totalCad)}
-            {cost.excluded.length > 0 && <span className="ml-2 text-xs font-normal">and up</span>}
-          </p>
+          <>
+            <p className="mt-1 text-2xl font-bold text-gold">
+              {formatCad(cost.totalCad)}
+              {cost.excluded.length > 0 && <span className="ml-2 text-xs font-normal">and up</span>}
+            </p>
+            {scaledServings > 1 && (
+              <p className="mt-0.5 text-sm font-bold text-plum-soft">
+                {cost.excluded.length > 0 ? "at least " : "about "}
+                {formatCad(cost.totalCad / scaledServings)} {recipe.servingNoun ? `a ${recipe.servingNoun}` : "a serving"}
+              </p>
+            )}
+          </>
         ) : (
           <p className="mt-1 text-plum-soft">No priced ingredients yet. Prices live behind the pantry door on the Meal Plan page.</p>
         )}
