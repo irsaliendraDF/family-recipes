@@ -9,13 +9,17 @@ const REV2 = "2026-08-30T12:00:00.000Z";
 const REV3 = "2026-08-30T18:00:00.000Z";
 /** Fourth: the caldereta and mashed potato amounts, servings and times. */
 const REV4 = "2026-08-30T22:00:00.000Z";
+/** Fifth: the tomato paste can size, now that it is known. */
+const REV5 = "2026-08-30T23:00:00.000Z";
+/** The newest revision. Every pantry item ships stamped with this. */
+const LATEST = REV5;
 
 /**
  * Every stamp the seed has ever used. A stored recipe carrying one of these has not
  * been edited in the app, so it is safe to refresh from the seed. Listed here rather
  * than copied into the store, because copying it is how a revision gets forgotten.
  */
-export const SEED_STAMPS = [NOW, REV1, REV2, REV3, REV4];
+export const SEED_STAMPS = [NOW, REV1, REV2, REV3, REV4, REV5];
 
 /**
  * Stamps every pantry item that ships with the app. A stored item still carrying one
@@ -24,7 +28,7 @@ export const SEED_STAMPS = [NOW, REV1, REV2, REV3, REV4];
  * saved instead, and is then left alone forever.
  */
 function stampPantry(items: PantryItem[]): PantryItem[] {
-  return items.map((item) => ({ ...item, updatedAt: REV4 }));
+  return items.map((item) => ({ ...item, updatedAt: LATEST }));
 }
 
 /**
@@ -436,7 +440,7 @@ export const SEED: AppData = {
         { id: "k4", name: "yellow onion", amount: 1, unit: "", note: "her words: a small onion, cut into strings, into the marinade" },
         { id: "k5", name: "black pepper", amount: 1, unit: "tbsp", note: "crushed, into the marinade" },
         { id: "k6", name: "olive oil", amount: null, unit: "", note: "a little, to warm the wok" },
-        { id: "k7", name: "tomato paste", amount: 1, unit: "", note: "one can, size not recorded" },
+        { id: "k7", name: "tomato paste", amount: 1, unit: "", note: "one 156 ml can" },
         { id: "k8", name: "basil leaves", amount: 4, unit: "", note: "dried; her words: 3 to 4 leaves" },
         { id: "k9", name: "dried oregano", amount: 0.5, unit: "tbsp" },
         { id: "k10", name: "chili powder", amount: 1, unit: "tsp", note: "goes in with the tomato paste" },
@@ -457,7 +461,7 @@ export const SEED: AppData = {
         "Serve on a bed of rice, which is a side of its own rather than part of the pot.",
       ],
       createdAt: REV3,
-      updatedAt: REV4,
+      updatedAt: REV5,
     },
     {
       id: "irene-mashed-potatoes",
@@ -827,7 +831,17 @@ export const SEED: AppData = {
       lastChecked: "2026-08-30",
       perPackage: { amount: 57, unit: "tbsp" },
     },
-    { id: "p-chocolate-chips", name: "chocolate chips", packageLabel: "no price yet", priceCad: null },
+    {
+      // The listing's $1.68 per 100 g against $16.77 puts the value bag at about 1 kg,
+      // and chips run roughly 175 g a cup, so about 5.5 cups.
+      id: "p-chocolate-chips",
+      name: "chocolate chips",
+      packageLabel: "about 1 kg value bag, Great Value Semi-Sweet Chocolate Chips",
+      priceCad: 16.77,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 5.5, unit: "cups" },
+    },
     {
       // 375 g of pitted dates at roughly 150 g per chopped cup, so about 2.5 cups.
       id: "p-dates",
@@ -951,7 +965,15 @@ export const SEED: AppData = {
     { id: "p-ground-pork", name: "ground pork", packageLabel: "no price yet", priceCad: null },
     { id: "p-shredded-cabbage", name: "shredded cabbage", packageLabel: "no price yet", priceCad: null },
     { id: "p-ground-ginger", name: "ground ginger", packageLabel: "no price yet", priceCad: null },
-    { id: "p-soy-sauce", name: "soy sauce", packageLabel: "no price yet", priceCad: null },
+    {
+      id: "p-soy-sauce",
+      name: "soy sauce",
+      packageLabel: "591 ml bottle, Kikkoman",
+      priceCad: 6.77,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 591, unit: "ml" },
+    },
     { id: "p-rice-vinegar", name: "rice vinegar", packageLabel: "no price yet", priceCad: null },
     { id: "p-oyster-sauce", name: "oyster sauce", packageLabel: "no price yet", priceCad: null },
     {
@@ -967,9 +989,28 @@ export const SEED: AppData = {
       lastChecked: "2026-08-30",
       perPackage: { amount: 1, unit: "lb" },
     },
-    { id: "p-tomato-paste", name: "tomato paste", packageLabel: "no price yet", priceCad: null },
+    {
+      // Priced by the can, which is how the recipe calls for it.
+      id: "p-tomato-paste",
+      name: "tomato paste",
+      packageLabel: "156 ml can, Hunt's Original",
+      priceCad: 1.42,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 1, unit: "" },
+    },
     { id: "p-basil-leaves", name: "basil leaves", packageLabel: "no price yet, and they are the dried ones", priceCad: null },
-    { id: "p-yellow-potatoes", name: "yellow potatoes", packageLabel: "no price yet", priceCad: null },
+    {
+      // A 2.27 kg (5 lb) bag at roughly 150 g a potato, so about 15 of them. That count
+      // is the rough part, since potato size varies more than most things here.
+      id: "p-yellow-potatoes",
+      name: "yellow potatoes",
+      packageLabel: "2.27 kg (5 lb) bag, Your Fresh Market Yellow Potatoes, about 15 medium ones",
+      priceCad: 5.77,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 15, unit: "" },
+    },
     { id: "p-carrots", name: "carrots", packageLabel: "no price yet", priceCad: null },
     { id: "p-spicy-pickles", name: "spicy pickles", packageLabel: "no price yet", priceCad: null },
     { id: "p-olives", name: "olives", packageLabel: "no price yet", priceCad: null },
