@@ -553,7 +553,15 @@ export const SEED: AppData = {
       perPackage: { amount: 7.5, unit: "cups" },
     },
     { id: "p-pork-shoulder", name: "pork shoulder", packageLabel: "no price yet", priceCad: null },
-    { id: "p-vegetable-oil", name: "vegetable oil", packageLabel: "no price yet", priceCad: null },
+    {
+      id: "p-vegetable-oil",
+      name: "vegetable oil",
+      packageLabel: "2.84 L jug, Great Value",
+      priceCad: 8.77,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 2840, unit: "ml" },
+    },
     {
       id: "p-yellow-onion",
       name: "yellow onion",
