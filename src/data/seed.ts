@@ -5,6 +5,8 @@ const NOW = "2026-08-29T00:00:00.000Z";
 const REV1 = "2026-08-30T00:00:00.000Z";
 /** Second revision the same day: her Gateway Meat Market prices. */
 const REV2 = "2026-08-30T12:00:00.000Z";
+/** Third: the egg roll servings and times she gave after the recipe first shipped. */
+const REV3 = "2026-08-30T18:00:00.000Z";
 
 /**
  * One sample recipe so every screen can be tested before Irene's real
@@ -377,9 +379,11 @@ export const SEED: AppData = {
     {
       id: "irene-egg-roll-in-a-bowl",
       title: "Egg Roll in a Bowl",
-      story: "Written down from a spoken description, so worth a read back. How many it feeds is not recorded yet.",
+      story: "Feeds 2 people for 2 meals. Written down from a spoken description, so worth a read back.",
       category: "Dinner",
-      servings: 1,
+      servings: 4,
+      prepMin: 10,
+      cookMin: 25,
       tags: [],
       ingredients: [
         { id: "e1", name: "ground pork", amount: 1, unit: "lb", note: "or ground beef, whichever you prefer" },
@@ -395,7 +399,7 @@ export const SEED: AppData = {
         "Add the shredded cabbage and the sauces to the browned meat, and cook until the cabbage is soft and most of the sauce has cooked into the cabbage and the meat.",
       ],
       createdAt: REV2,
-      updatedAt: REV2,
+      updatedAt: REV3,
     },
   ],
   pantry: [
@@ -490,7 +494,16 @@ export const SEED: AppData = {
       lastChecked: "2026-08-30",
       perPackage: { amount: 250, unit: "ml" },
     },
-    { id: "p-lemon-juice", name: "lemon juice", packageLabel: "covered by the lemons", priceCad: null },
+    {
+      // The listing showed $2.47 on sale from $2.97 but no bottle size, and its unit
+      // price was unreadable, so there is no perPackage and this cannot be costed yet.
+      id: "p-lemon-juice",
+      name: "lemon juice",
+      packageLabel: "ReaLemon bottle, $2.47 on sale from $2.97, size not on the listing so it cannot be costed yet",
+      priceCad: 2.47,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+    },
     {
       id: "p-blueberries",
       name: "blueberries",
@@ -708,8 +721,27 @@ export const SEED: AppData = {
       // Honey is heavier than water, so 1 kg is roughly 700 ml.
       perPackage: { amount: 700, unit: "ml" },
     },
-    { id: "p-butter", name: "butter", packageLabel: "no price yet", priceCad: null },
-    { id: "p-cornstarch", name: "cornstarch", packageLabel: "no price yet", priceCad: null },
+    {
+      // The chocolate chip cookie sheet says "butter" where the others say "unsalted
+      // butter", so this is a second line for the same tub, priced from the same listing.
+      id: "p-butter",
+      name: "butter",
+      packageLabel: "454 g Becel plant butter, unsalted sticks, the same one as above",
+      priceCad: 4.48,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 2, unit: "cups" },
+    },
+    {
+      // 454 g at roughly 8 g per tbsp, so about 57 tbsp.
+      id: "p-cornstarch",
+      name: "cornstarch",
+      packageLabel: "454 g box, Great Value 100% Pure Corn Starch",
+      priceCad: 3.77,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 57, unit: "tbsp" },
+    },
     { id: "p-chocolate-chips", name: "chocolate chips", packageLabel: "no price yet", priceCad: null },
     {
       // 375 g of pitted dates at roughly 150 g per chopped cup, so about 2.5 cups.
@@ -782,9 +814,36 @@ export const SEED: AppData = {
       perPackage: { amount: 1, unit: "rack" },
     },
     { id: "p-smoked-paprika", name: "smoked paprika", packageLabel: "no price yet", priceCad: null },
-    { id: "p-garlic-powder", name: "garlic powder", packageLabel: "no price yet", priceCad: null },
-    { id: "p-onion-powder", name: "onion powder", packageLabel: "no price yet", priceCad: null },
-    { id: "p-chili-powder", name: "chili powder", packageLabel: "no price yet", priceCad: null },
+    {
+      // 150 g at roughly 3 g per tsp, so about 50 tsp.
+      id: "p-garlic-powder",
+      name: "garlic powder",
+      packageLabel: "150 g bag, Great Value",
+      priceCad: 2.27,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 50, unit: "tsp" },
+    },
+    {
+      // 150 g at roughly 2.4 g per tsp, so about 62 tsp.
+      id: "p-onion-powder",
+      name: "onion powder",
+      packageLabel: "150 g bag, Great Value",
+      priceCad: 2.27,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 62, unit: "tsp" },
+    },
+    {
+      // 150 g at roughly 2.6 g per tsp, so about 58 tsp.
+      id: "p-chili-powder",
+      name: "chili powder",
+      packageLabel: "150 g bag, Great Value",
+      priceCad: 2.27,
+      priceSource: "walmart",
+      lastChecked: "2026-08-30",
+      perPackage: { amount: 58, unit: "tsp" },
+    },
     {
       id: "p-chili-flakes",
       name: "chili flakes",

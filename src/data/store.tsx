@@ -22,7 +22,7 @@ const TABLE_OF = {
 } as const;
 
 /** Timestamps that mark a stored seed recipe as never touched by Irene in the app. */
-const PRISTINE_SEED_STAMPS = new Set(["2026-08-29T00:00:00.000Z", "2026-08-30T00:00:00.000Z"]);
+const PRISTINE_SEED_STAMPS = new Set(["2026-08-29T00:00:00.000Z", "2026-08-30T00:00:00.000Z", "2026-08-30T12:00:00.000Z"]);
 
 /**
  * Recipes Irene hands to Claude ship inside the app. A device (or database)
