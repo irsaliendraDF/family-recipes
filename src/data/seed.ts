@@ -533,6 +533,24 @@ export const SEED: AppData = {
       updatedAt: REV4,
     },
     {
+      id: "irene-sweet-potato-mash",
+      title: "Sweet Potato Mash",
+      story:
+        "Mashed sweet potatoes with some brown sugar, cinnamon and butter. The amounts, the cooking and how many it feeds are still to come; until then it is counted as one batch.",
+      category: "Side",
+      servings: 1,
+      tags: [],
+      ingredients: [
+        { id: "sp1", name: "sweet potatoes", amount: null, unit: "", note: "amount not recorded yet" },
+        { id: "sp2", name: "brown sugar", amount: null, unit: "", note: "her words: some" },
+        { id: "sp3", name: "ground cinnamon", amount: null, unit: "", note: "amount not recorded yet" },
+        { id: "sp4", name: "butter", amount: null, unit: "", note: "amount not recorded yet" },
+      ],
+      steps: ["Mash the sweet potatoes with the brown sugar, cinnamon and butter."],
+      createdAt: REV8,
+      updatedAt: REV8,
+    },
+    {
       id: "irene-gingersnap-cookies",
       title: "Gingersnap Cookies",
       story:
@@ -1264,6 +1282,7 @@ export const SEED: AppData = {
     { id: "p-molasses", name: "molasses", packageLabel: "no price yet", priceCad: null },
     { id: "p-fresh-ginger", name: "fresh ginger", packageLabel: "no price yet", priceCad: null },
     { id: "p-turbinado-sugar", name: "turbinado sugar", packageLabel: "no price yet", priceCad: null },
+    { id: "p-sweet-potatoes", name: "sweet potatoes", packageLabel: "no price yet", priceCad: null },
     { id: "p-cajun-seasoning", name: "cajun seasoning", packageLabel: "no price yet", priceCad: null },
     { id: "p-fresh-parsley", name: "fresh parsley", packageLabel: "no price yet", priceCad: null },
     { id: "p-dried-thyme", name: "dried thyme", packageLabel: "no price yet", priceCad: null },
