@@ -16,14 +16,16 @@ const REV6 = "2026-08-31T00:00:00.000Z";
 /** Seventh: minced ginger, the pepperoncini, per-piece costs and 15 cookies. */
 const REV7 = "2026-08-31T02:00:00.000Z";
 /** The newest revision. Every pantry item ships stamped with this. */
-const LATEST = REV7;
+/** Eighth: the gingersnap and soft sugar cookies, the Cajun butter, and the eleven ingredients they bring. */
+const REV8 = "2026-11-22T00:00:00.000Z";
+const LATEST = REV8;
 
 /**
  * Every stamp the seed has ever used. A stored recipe carrying one of these has not
  * been edited in the app, so it is safe to refresh from the seed. Listed here rather
  * than copied into the store, because copying it is how a revision gets forgotten.
  */
-export const SEED_STAMPS = [NOW, REV1, REV2, REV3, REV4, REV5, REV6, REV7];
+export const SEED_STAMPS = [NOW, REV1, REV2, REV3, REV4, REV5, REV6, REV7, REV8];
 
 /**
  * Stamps every pantry item that ships with the app. A stored item still carrying one
@@ -119,7 +121,8 @@ export const SEED: AppData = {
     {
       id: "irene-roast-chicken",
       title: "Roast Chicken",
-      story: "One whole chicken, dry brined for crispy skin. Feeds 6 at once, or 2 people for 3 days.",
+      story:
+        "One whole chicken, dry brined for crispy skin. Feeds 6 at once, or 2 people for 3 days. The butter here is the lemon and herb one; for the other flavour, see Cajun Compound Butter.",
       category: "Dinner",
       servings: 6,
       prepMin: 80,
@@ -145,7 +148,38 @@ export const SEED: AppData = {
         "Tip: save the pan juices; the drippings hold concentrated flavour and can be spooned over the carved meat or whisked into a pan gravy.",
       ],
       createdAt: NOW,
-      updatedAt: REV1,
+      updatedAt: REV8,
+    },
+    {
+      id: "irene-cajun-compound-butter",
+      title: "Cajun Compound Butter",
+      story:
+        "The second flavour for the Roast Chicken: use it in place of the lemon and herb butter, after the dry brine. Counted as one batch.",
+      category: "Dinner",
+      servings: 1,
+      tags: [],
+      ingredients: [
+        { id: "cb1", name: "butter", amount: 0.5, unit: "cups", note: "8 tbsp, 115 g, softened to room temperature" },
+        {
+          id: "cb2",
+          name: "cajun seasoning",
+          amount: 1.5,
+          unit: "tbsp",
+          note: "1.5 to 2 tbsp; use 1.5 if your blend is very hot",
+        },
+        { id: "cb3", name: "fresh parsley", amount: 2, unit: "tbsp", note: "finely chopped, or 2 tsp dried" },
+        { id: "cb4", name: "garlic powder", amount: 1, unit: "tsp" },
+        { id: "cb5", name: "onion powder", amount: 1, unit: "tsp" },
+        { id: "cb6", name: "paprika", amount: 0.5, unit: "tsp", note: "smoked in the recipe" },
+        { id: "cb7", name: "dried thyme", amount: 0.5, unit: "tsp", note: "or dried oregano" },
+        { id: "cb8", name: "lemons", amount: 0.5, unit: "", note: "1 tsp fresh zest, from about half a lemon" },
+      ],
+      steps: [
+        "Mix the seasonings into the softened butter.",
+        "Use it on the Roast Chicken after the dry brine, in place of the lemon and herb butter.",
+      ],
+      createdAt: REV8,
+      updatedAt: REV8,
     },
     {
       id: "irene-peanut-butter-cookies",
@@ -497,6 +531,86 @@ export const SEED: AppData = {
       ],
       createdAt: REV3,
       updatedAt: REV4,
+    },
+    {
+      id: "irene-gingersnap-cookies",
+      title: "Gingersnap Cookies",
+      story:
+        "Makes 36 cookies. Her way: medium sized balls rolled in sugar, baked straight from frozen. The photo showed the ingredients only, so the mixing steps are still to come.",
+      category: "Dessert",
+      servings: 36,
+      servingNoun: "cookie",
+      cookMin: 15,
+      tags: [],
+      ingredients: [
+        { id: "gs1", name: "all-purpose flour", amount: 2, unit: "cups", note: "250 g, approximately 2 cups" },
+        { id: "gs2", name: "baking soda", amount: 2, unit: "tsp" },
+        { id: "gs3", name: "salt", amount: 0.5, unit: "tsp", note: "fine sea salt" },
+        { id: "gs4", name: "ground ginger", amount: 2, unit: "tsp" },
+        { id: "gs5", name: "ground cinnamon", amount: 1.5, unit: "tsp" },
+        { id: "gs6", name: "ground cloves", amount: 0.5, unit: "tsp" },
+        { id: "gs7", name: "nutmeg", amount: 0.25, unit: "tsp", note: "freshly grated" },
+        { id: "gs8", name: "unsalted butter", amount: 0.5, unit: "cups", note: "115 g, softened to room temperature" },
+        { id: "gs9", name: "brown sugar", amount: 0.75, unit: "cups", note: "150 g, dark brown, packed" },
+        { id: "gs10", name: "granulated sugar", amount: 0.25, unit: "cups", note: "50 g, white" },
+        { id: "gs11", name: "eggs", amount: 1, unit: "", note: "large, room temperature" },
+        { id: "gs12", name: "molasses", amount: 0.25, unit: "cups", note: "85 g, dark molasses or unsulphured blackstrap" },
+        { id: "gs13", name: "vanilla extract", amount: 1, unit: "tsp", note: "pure" },
+        { id: "gs14", name: "fresh ginger", amount: 1, unit: "tbsp", note: "freshly grated, fine microplane grate" },
+        {
+          id: "gs15",
+          name: "turbinado sugar",
+          amount: 0.33,
+          unit: "cups",
+          note: "65 g, for rolling; coarse raw sugar or granulated sugar also work",
+        },
+      ],
+      steps: [
+        "Roll the dough into medium sized balls and roll each one in the rolling sugar. She freezes them.",
+        "From frozen: bake at 350 F for 15 minutes.",
+      ],
+      createdAt: REV8,
+      updatedAt: REV8,
+    },
+    {
+      id: "irene-soft-sugar-cookies",
+      title: "Soft Sugar Cookies",
+      story:
+        "A soft sugar cookie with a classic sugar frosting. The photo showed the ingredients only, so the mixing steps and the number of cookies are still to come; until then it is counted as one batch.",
+      category: "Dessert",
+      servings: 1,
+      cookMin: 12,
+      tags: [],
+      ingredients: [
+        { id: "sc1", name: "all-purpose flour", amount: 2, unit: "cups", note: "250 g, approximately 2 cups" },
+        { id: "sc2", name: "baking powder", amount: 0.5, unit: "tsp" },
+        { id: "sc3", name: "salt", amount: 0.25, unit: "tsp", note: "fine sea salt" },
+        { id: "sc4", name: "unsalted butter", amount: 0.5, unit: "cups", note: "115 g, softened to room temperature" },
+        { id: "sc5", name: "granulated sugar", amount: 0.5, unit: "cups", note: "100 g, white" },
+        { id: "sc6", name: "powdered sugar", amount: 0.25, unit: "cups", note: "30 g, for a delicate tender crumb" },
+        { id: "sc7", name: "eggs", amount: 1, unit: "", note: "large, room temperature" },
+        { id: "sc8", name: "vanilla extract", amount: 1, unit: "tsp", note: "pure" },
+        { id: "sc9", name: "almond extract", amount: 0.25, unit: "tsp", note: "pure" },
+        { id: "sc10", name: "powdered sugar", amount: 2, unit: "cups", note: "frosting: 240 g, sifted" },
+        { id: "sc11", name: "unsalted butter", amount: 2, unit: "tbsp", note: "frosting: 30 g, melted and cooled slightly" },
+        {
+          id: "sc12",
+          name: "heavy cream",
+          amount: 3,
+          unit: "tbsp",
+          note: "frosting: 3 to 4 tbsp, or evaporated milk, adjust for thickness",
+        },
+        { id: "sc13", name: "vanilla extract", amount: 0.5, unit: "tsp", note: "frosting: pure" },
+        { id: "sc14", name: "almond extract", amount: 0.25, unit: "tsp", note: "frosting: pure" },
+        { id: "sc15", name: "salt", amount: null, unit: "", note: "frosting: a pinch of fine sea salt" },
+        { id: "sc16", name: "food colouring or sprinkles", amount: null, unit: "", note: "frosting: optional" },
+      ],
+      steps: [
+        "If freezing, shape the dough into the sizes you want first.",
+        "Bake at 350 F for 12 minutes.",
+      ],
+      createdAt: REV8,
+      updatedAt: REV8,
     },
   ],
   pantry: stampPantry([
@@ -1144,6 +1258,17 @@ export const SEED: AppData = {
       perPackage: { amount: 100, unit: "tbsp" },
     },
     { id: "p-rice", name: "rice", packageLabel: "no price yet", priceCad: null },
+    { id: "p-ground-ginger", name: "ground ginger", packageLabel: "no price yet", priceCad: null },
+    { id: "p-ground-cloves", name: "ground cloves", packageLabel: "no price yet", priceCad: null },
+    { id: "p-nutmeg", name: "nutmeg", packageLabel: "no price yet", priceCad: null },
+    { id: "p-molasses", name: "molasses", packageLabel: "no price yet", priceCad: null },
+    { id: "p-fresh-ginger", name: "fresh ginger", packageLabel: "no price yet", priceCad: null },
+    { id: "p-turbinado-sugar", name: "turbinado sugar", packageLabel: "no price yet", priceCad: null },
+    { id: "p-cajun-seasoning", name: "cajun seasoning", packageLabel: "no price yet", priceCad: null },
+    { id: "p-fresh-parsley", name: "fresh parsley", packageLabel: "no price yet", priceCad: null },
+    { id: "p-dried-thyme", name: "dried thyme", packageLabel: "no price yet", priceCad: null },
+    { id: "p-almond-extract", name: "almond extract", packageLabel: "no price yet", priceCad: null },
+    { id: "p-heavy-cream", name: "heavy cream", packageLabel: "no price yet", priceCad: null },
   ]),
   plans: [],
   suggestions: [],
